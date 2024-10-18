@@ -1,0 +1,156 @@
+:root{
+  --baseWidth: 250px;
+  --sidebarWidth: clamp(150px, 1.875rem + 21.4286vw, 180px);
+}
+body{
+  display: grid;
+  grid-template-columns: var(--sidebarWidth) 1fr;
+}
+main{
+  padding: 20px;
+}
+main > *{
+  margin-bottom: 40px;
+}
+main h1{
+  margin-bottom: 10px;
+}
+form > *:not(:last-child){
+  margin-bottom: 20px;
+}
+form .top{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+form .top > div{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+form .top input{
+  border: 0;
+  padding: 0;
+  border-bottom: 1px solid black;
+  border-radius: 0;
+}
+form .top input:focus{
+  border: 0;
+  border-bottom: 1px solid hsl(0, 0%, 65%);
+}
+form .top input[type="text"]{
+  width: clamp(200px, 50%, 300px);
+}
+form .top input[type="date"]{
+  width: fit-content;
+}
+form label[for="ancMainImg"]{
+  align-self: center;
+  height: var(--baseWidth);
+  width: var(--baseWidth);
+}
+form .mainImgCont{
+  background: hsl(0, 0%, 90%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: var(--baseWidth);
+  width: var(--baseWidth);
+  cursor: pointer;
+}
+form label[for="ancMainImg"].hasImg,
+form label[for="ancMainImg"].hasImg .mainImgCont{
+  width: fit-content;
+}
+form .mainImgCont p{
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  transform: translate(50%, 50%);
+}
+form .imagePreview{
+  /* object-fit: contain; */
+  height: var(--baseWidth);
+}
+form .mid .galleryImages{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 10px;
+}
+form .mid .galleryImages li{
+  display: flex;
+  aspect-ratio: 1;
+}
+form .mid .galleryImages img{
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+form .mid label[for="ancGalleryImg"]{
+  height: 100%;
+  width: 100%;
+}
+form .mid label[for="ancGalleryImg"] div{
+  background: hsl(0, 0%, 90%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+form .bottom{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+form .errorMsg{
+  opacity: 0;
+  color: rgb(235, 16, 16);
+}
+form .bottom button{
+  background: var(--white);
+  padding: 8px 14px;
+  border: solid 1px var(--l-gray-1);
+  width: fit-content;
+}
+
+/* --==Responsive==-- */
+@media(max-width: 1400px){
+  :root{
+    --cont-width: 1200px;
+  }
+
+}
+@media(max-width: 1250px){
+  :root{
+    --cont-width: 900px;
+  }
+
+}
+@media(max-width: 940px){
+  :root{
+    --cont-width: 720px;
+  }
+}
+@media(max-width: 780px){
+  :root{
+    --cont-width: 520px;
+  }
+
+}
+@media(max-width: 560px){
+  :root{
+    --cont-width: calc(100% - 30px);
+  }
+
+  form .mid .galleryImages{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  td, th{ padding: 3px; }
+}

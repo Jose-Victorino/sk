@@ -1,0 +1,27 @@
+main{
+  margin-inline: 15px;
+}
+main section{
+  padding-block: 30px;
+}
+#main-annc-list{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+}
+/* #main-annc-list li{
+  aspect-ratio: 3 / 4;
+} */
+#main-annc-list [data-annc-main-img]{
+  object-fit: cover;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+}
+#main-annc-list [data-annc-title]{
+  margin-bottom: 5px;
+}
+#main-annc-list [data-annc-date-posted]{
+  color: var(--gray);
+  font-size: var(--fs-12-14);
+  
+}
