@@ -29,13 +29,13 @@
         <div class="right">
           <ul class="navLinks">
             <li>
-              <a>Overview</a>
+              <a data-nav-tabs="Overview">Overview</a>
             </li>
             <li>
-              <a>Announcements</a>
+              <a data-nav-tabs="Announcements">Announcements</a>
             </li>
             <li>
-              <a>Council Members</a>
+              <a data-nav-tabs="Council Members">Council Members</a>
             </li>
           </ul>
         </div>
@@ -76,48 +76,99 @@
     </article>
   </nav>
   <main>
-    <section>
-      <h1>Add Announcements</h1>
-      <form>
-        <div class="top">
-          <input type="file" name="ancMainImg" id="ancMainImg" accept="image/*" hidden>
-          <div>
-            <label for="ancMainImg">
-              <div class="mainImgCont">
-                <img class="imagePreview">
-                <p>Add Photo</p>
-              </div>
-            </label>
-          </div>
-          <div>
-            <span>
-              <span>Title: </span>
-              <input type="text" name="ancTitle" id="ancTitle" required>
-            </span>
-            <textarea name="ancDescription" id="ancDescription"></textarea>
-          </div>
-        </div>
-        <div class="mid">
-          <h1>Gallery</h1>
-          <input type="file" name="ancGalleryImg" id="ancGalleryImg" accept="image/*" multiple="multiple" hidden>
-          <ul class="galleryImages">
-            <li class="addImg">
-              <label for="ancGalleryImg">
-                <div>+</div>
+    <article data-nav-windows="Overview">
+
+    </article>
+    <article data-nav-windows="Announcements">
+      <section>
+        <h1>Add Announcements</h1>
+        <form id="announcementForm" enctype="multipart/form-data">
+          <div class="top">
+            <input type="file" name="ancMainImg" id="ancMainImg" accept="image/*" hidden>
+            <div>
+              <label for="ancMainImg">
+                <div class="mainImgCont">
+                  <img class="imagePreview">
+                  <p>Add Photo</p>
+                </div>
               </label>
-            </li>
-          </ul>
-        </div>
-        <div class="bottom">
-          <span class="errorMsg">*No cover photo selected</span>
-          <button type="submit">Post</button>
-        </div>
-      </form>
-    </section>
-    <section>
-      <h1>Posted Announcements</h1>
-    </section>
+            </div>
+            <div>
+              <span>
+                <span>Title: </span>
+                <input type="text" name="ancTitle" id="ancTitle" required>
+              </span>
+              <textarea name="ancDescription" id="ancDescription"></textarea>
+            </div>
+          </div>
+          <div class="mid">
+            <h1>Gallery</h1>
+            <input type="file" name="ancGalleryImg" id="ancGalleryImg" accept="image/*" multiple="multiple" hidden>
+            <ul class="galleryImages">
+              <li class="addImg">
+                <label for="ancGalleryImg">
+                  <div>+</div>
+                </label>
+              </li>
+            </ul>
+          </div>
+          <div class="bottom">
+            <span class="errorMsg">*No cover photo selected</span>
+            <button type="submit">Post</button>
+          </div>
+        </form>
+      </section>
+      <section>
+        <h1>Posted Announcements</h1>
+        <ul class="annc-preview">
+        <% for(const annc of announcements){ %>
+          <li>
+            <%
+              const { AnnouncementID, Title, Description, DatePosted } = annc;
+              const setDate = new Date(DatePosted);
+              const formattedDate =
+                `${setDate.toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+                ${setDate.toLocaleTimeString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit'
+                })}`;
+            %>
+            <input type="hidden" value="<%= AnnouncementID %>">
+            <div class="ancMain">
+              <% for(const img of images){ %>
+                <% const { ImageType, ImagePath } = img; %>
+                <% if(ImageType === 'main' && img.AnnouncementID === AnnouncementID){ %>
+                  <img data-main-img class="mainImg" src="<%= ImagePath %>" loading="lazy" alt="main image">
+                <% } %>
+              <% } %>
+              <div class="txt">
+                <h2><%= Title %></h2>
+                <span><%= formattedDate %></span>
+                <p><%= Description %></p>
+              </div>
+            </div>
+            <div class="ancGallery">
+              <% for(const img of images){ %>
+                <% const { ImageType, ImagePath } = img; %>
+                <% if(ImageType === 'gallery' && img.AnnouncementID === AnnouncementID){ %>
+                  <img data-main-img src="<%= ImagePath %>" loading="lazy" alt="gallery image">
+                <% } %>
+              <% } %>
+            </div>
+          </li>
+        <% } %>
+        </ul>
+      </section>
+    </article>
+    <article data-nav-windows="Council Members">
+
+    </article>
   </main>
+  <script src="../javascripts/imgViewer.js"></script>
   <script src="../javascripts/nav.js"></script>
   <script src="../javascripts/script.js"></script>
   <script src="../javascripts/admin.js"></script>

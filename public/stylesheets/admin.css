@@ -1,56 +1,71 @@
 :root{
-  --baseWidth: 250px;
+  --baseWidth: 220px;
   --sidebarWidth: clamp(150px, 1.875rem + 21.4286vw, 180px);
 }
 body{
+  overflow: hidden;
   display: grid;
   grid-template-columns: var(--sidebarWidth) 1fr;
 }
+
+nav[data-nav] .navlinks [data-nav-tabs].selected{
+  font-weight: bold;
+}
+
 main{
+  overflow: hidden auto;
+}
+main article{
+  display: none;
+  flex-direction: column;
   padding: 20px;
 }
-main > *{
+main article > *{
   margin-bottom: 40px;
 }
-main h1{
+[data-nav-windows].show{
+  display: flex;
+}
+article h1{
+  font-size: var(--fs-20-24);
   margin-bottom: 10px;
 }
-form > *:not(:last-child){
+#announcementForm > *:not(:last-child){
   margin-bottom: 20px;
 }
-form .top{
+#announcementForm .top{
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-form .top > div{
+#announcementForm .top > div{
   display: flex;
   flex-direction: column;
   gap: 15px;
   width: 100%;
 }
-form .top input{
+#announcementForm .top input{
   border: 0;
   padding: 0;
   border-bottom: 1px solid black;
   border-radius: 0;
 }
-form .top input:focus{
+#announcementForm .top input:focus{
   border: 0;
   border-bottom: 1px solid hsl(0, 0%, 65%);
 }
-form .top input[type="text"]{
+#announcementForm .top input[type="text"]{
   width: clamp(200px, 50%, 300px);
 }
-form .top input[type="date"]{
+#announcementForm .top input[type="date"]{
   width: fit-content;
 }
-form label[for="ancMainImg"]{
+#announcementForm label[for="ancMainImg"]{
   align-self: center;
   height: var(--baseWidth);
   width: var(--baseWidth);
 }
-form .mainImgCont{
+#announcementForm .mainImgCont{
   background: hsl(0, 0%, 90%);
   display: flex;
   align-items: center;
@@ -60,39 +75,42 @@ form .mainImgCont{
   width: var(--baseWidth);
   cursor: pointer;
 }
-form label[for="ancMainImg"].hasImg,
-form label[for="ancMainImg"].hasImg .mainImgCont{
+#announcementForm .mainImgCont p{
+  font-size: var(--fs-12-14);
+}
+#announcementForm label[for="ancMainImg"].hasImg,
+#announcementForm label[for="ancMainImg"].hasImg .mainImgCont{
   width: fit-content;
 }
-form .mainImgCont p{
+#announcementForm .mainImgCont p{
   position: absolute;
   bottom: 50%;
   right: 50%;
   transform: translate(50%, 50%);
 }
-form .imagePreview{
+#announcementForm .imagePreview{
   /* object-fit: contain; */
   height: var(--baseWidth);
 }
-form .mid .galleryImages{
+#announcementForm .mid .galleryImages{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
   gap: 10px;
 }
-form .mid .galleryImages li{
+#announcementForm .mid .galleryImages li{
   display: flex;
   aspect-ratio: 1;
 }
-form .mid .galleryImages img{
+#announcementForm .mid .galleryImages img{
   object-fit: cover;
   height: 100%;
   width: 100%;
 }
-form .mid label[for="ancGalleryImg"]{
+#announcementForm .mid label[for="ancGalleryImg"]{
   height: 100%;
   width: 100%;
 }
-form .mid label[for="ancGalleryImg"] div{
+#announcementForm .mid label[for="ancGalleryImg"] div{
   background: hsl(0, 0%, 90%);
   display: flex;
   justify-content: center;
@@ -102,21 +120,55 @@ form .mid label[for="ancGalleryImg"] div{
   width: 100%;
   cursor: pointer;
 }
-form .bottom{
+#announcementForm .bottom{
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
-form .errorMsg{
+#announcementForm .errorMsg{
   opacity: 0;
   color: rgb(235, 16, 16);
 }
-form .bottom button{
+#announcementForm .bottom button{
   background: var(--white);
   padding: 8px 14px;
   border: solid 1px var(--l-gray-1);
   width: fit-content;
+}
+.annc-preview{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.annc-preview li{
+  background: var(--l-gray-1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+}
+.annc-preview li > div{
+  display: flex;
+  gap: 15px;
+}
+.annc-preview .mainImg{
+  height: 250px;
+}
+.annc-preview .txt{
+  display: flex;
+  flex-direction: column;
+}
+.annc-preview .txt span{
+  font-size: var(--fs-12-14);
+  margin: 7px 0 12px;
+}
+.annc-preview .ancGallery{
+  display: flex;
+  gap: 5px;
+}
+.annc-preview .ancGallery img{
+  height: 150px;
 }
 
 /* --==Responsive==-- */
@@ -148,7 +200,7 @@ form .bottom button{
     --cont-width: calc(100% - 30px);
   }
 
-  form .mid .galleryImages{
+  #announcementForm .mid .galleryImages{
     grid-template-columns: repeat(2, 1fr);
   }
 

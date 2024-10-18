@@ -2,27 +2,14 @@ var express = require('express');
 var router = express.Router();
 var con = require('../config/db');
 
-/* GET home page. */
-router.get('/', function(req, res, next){
-  res.render('index');
-});
-
-// ADMIN
-router.get('/admin', function(req, res, next){
-  res.render('admin');
-});
-
-router.get('/admin/ancGet', function(req, res, next){
+const loadData = () => {
   const announcementsQuery = new Promise((resolve, reject) => {
     con.all('SELECT * FROM announcement', function(err, rows){
       if(err){
         console.error('Cannot load announcements data');
         reject(err);
       }
-      else{
-        console.log('Announcements data successfully loaded!');
-        resolve(rows);
-      }
+      resolve(rows);
     });
   });
   const imagesQuery = new Promise((resolve, reject) => {
@@ -31,10 +18,7 @@ router.get('/admin/ancGet', function(req, res, next){
         console.error('Cannot load images data');
         reject(err);
       }
-      else{
-        console.log('Images data successfully loaded!');
-        resolve(rows);
-      }
+      resolve(rows);
     });
   });
   const commentsQuery = new Promise((resolve, reject) => {
@@ -43,34 +27,48 @@ router.get('/admin/ancGet', function(req, res, next){
         console.error('Cannot load comments data');
         reject(err);
       }
-      else{
-        console.log('Comments data successfully loaded!');
-        resolve(rows);
-      }
+      resolve(rows);
     });
   });
-  const reactsQuery = new Promise((resolve, reject) => {
-    con.all('SELECT * FROM reacts', function(err, rows){
-      if(err){
-        console.error('Cannot load reacts data');
-        reject(err);
-      }
-      else{
-        console.log('Reacts data successfully loaded!');
-        resolve(rows);
-      }
-    });
-  });
+  // const councilMembersQuery = new Promise((resolve, reject) => {
+  //   con.all('SELECT * FROM `council members`', function(err, rows){
+  //     if(err){
+  //       console.error('Cannot load council members data');
+  //       reject(err);
+  //     }
+  //     resolve(rows);
+  //   });
+  // });
 
-  Promise.all([announcementsQuery, imagesQuery, commentsQuery, reactsQuery])
-  .then(([announcements, images, comments, reacts]) => {
-    res.status(200).json({
+  return Promise.all([announcementsQuery, imagesQuery, commentsQuery])
+}
+
+// HOME
+router.get('/', function(req, res, next){
+  loadData()
+  .then(([announcements, images, comments]) => {
+    res.render('index', {
       announcements: announcements || [],
       images: images || [],
       comments: comments || [],
-      reacts: reacts || [],
-      success: true,
-      message: 'All data successfully loaded!',
+    });
+  })
+  .catch(err => {
+    console.error('Error loading data', err);
+    res.status(500).json({
+      success: false,
+      message: 'Cannot load data'
+    });
+  });
+});
+// ADMIN
+router.get('/admin', function(req, res, next){
+  loadData()
+  .then(([announcements, images, comments]) => {
+    res.render('admin', {
+      announcements: announcements || [],
+      images: images || [],
+      comments: comments || [],
     });
   })
   .catch(err => {
@@ -82,6 +80,25 @@ router.get('/admin/ancGet', function(req, res, next){
   });
 });
 
+router.get('/admin/ancGet', function(req, res, next){
+  loadData()
+  .then(([announcements, images, comments]) => {
+    res.status(200).json({
+      success: true,
+      message: 'All data successfully loaded!',
+      announcements: announcements || [],
+      images: images || [],
+      comments: comments || [],
+    });
+  })
+  .catch(err => {
+    console.error('Error loading data', err);
+    res.status(500).json({
+      success: false,
+      message: 'Cannot load data',
+    });
+  });
+});
 // ANNOUNCEMENT
 router.post('/admin/ancAdd', function(req, res, next){
   const { title, description, mainImg, galleryImgs } = req.body;

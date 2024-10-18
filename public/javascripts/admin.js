@@ -1,9 +1,9 @@
-const form = document.querySelector('form');
-const ancMainImg = form.querySelector('#ancMainImg');
-const mainLabel = form.querySelector('label[for="ancMainImg"]');
+const anncForm = document.querySelector('#announcementForm');
+const ancMainImg = anncForm.querySelector('#ancMainImg');
+const mainLabel = anncForm.querySelector('label[for="ancMainImg"]');
 const mainImagePreview = mainLabel.querySelector('.imagePreview');
 const mainImgP = mainLabel.querySelector('p');
-const errorMsg = form.querySelector('.errorMsg');
+const errorMsg = anncForm.querySelector('.errorMsg');
 
 ancMainImg.addEventListener('change', (e) => {
   const file = e.target.files[0];
@@ -22,8 +22,8 @@ ancMainImg.addEventListener('change', (e) => {
   }
 });
 
-const ancGalleryImg = form.querySelector('#ancGalleryImg');
-const galleryUl = form.querySelector('.galleryImages');
+const ancGalleryImg = anncForm.querySelector('#ancGalleryImg');
+const galleryUl = anncForm.querySelector('.galleryImages');
 const addGalleryImg = galleryUl.querySelector('.addImg');
 
 ancGalleryImg.addEventListener('change', (e) => {
@@ -33,46 +33,42 @@ ancGalleryImg.addEventListener('change', (e) => {
     if(file && file.type.startsWith('image/')){
       const li = document.createElement('li');
       const img = document.createElement('img');
+      
       img.src = URL.createObjectURL(file);
-
       li.appendChild(img);
       addGalleryImg.before(li);
     }
   }
 });
 
-
-form.addEventListener('submit', async (e) => {
+anncForm.addEventListener('submit', (e) => {
   e.preventDefault();
   
-  const title = form.querySelector('#ancTitle');
-  const description = form.querySelector('#ancDescription');
-  const mainImg = document.getElementById('ancMainImg').files[0]?.name;
+  const title = anncForm.querySelector('#ancTitle').value;
+  const description = anncForm.querySelector('#ancDescription').value;
+  const mainImg = document.getElementById('ancMainImg').files[0].name;
   const galleryImgList = document.getElementById('ancGalleryImg').files;
-  
-  const galleryImgs = [];
-  for(const img of galleryImgList){
-    galleryImgs.push(`../images/${img.name}`);
-  }
   
   if(!mainImg){
     errorMsg.style.opacity = '1';
     return;
   }
-
-  const data = {
-    title: title.value,
-    description: description.value,
-    mainImg: `../images/${mainImg}`,
-    galleryImgs,
-  };
+  errorMsg.style.opacity = '0';
   
+  const data = {
+    title: title,
+    description: description,
+    mainImg: `../images/${mainImg}`,
+    galleryImgs: [],
+  };
+
+  for(const img of galleryImgList){
+    data.galleryImgs.push(`../images/${img}`);
+  }
   
   fetch('/admin/ancAdd', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
   .then(response => response.json())
@@ -85,12 +81,29 @@ form.addEventListener('submit', async (e) => {
         </label>
       </li>`;
 
-      title.value = '';
-      description.value = '';
+      anncForm.reset();
       mainImagePreview.src = '';
       mainLabel.classList.remove('hasImg');
       mainImagePreview.style.display = 'none';
       mainImgP.style.display = 'block';
     }
   });
+});
+
+const mainTabs = document.querySelectorAll('[data-nav-tabs]');
+const mainWindows = document.querySelectorAll('[data-nav-windows]');
+
+mainTabs.forEach((tab) => {
+	tab.addEventListener('click', () => {
+    mainWindows.forEach((window, i) => {
+			if(tab.dataset.navTabs === window.dataset.navWindows){
+				mainTabs[i].classList.add('selected');
+				window.classList.add('show');
+			}
+			else{
+				mainTabs[i].classList.remove('selected');
+				window.classList.remove('show');
+			}
+		});
+	});
 });
