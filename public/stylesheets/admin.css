@@ -26,7 +26,6 @@ main article{
 }
 article h1{
   font-size: var(--fs-20-24);
-  margin-bottom: 10px;
 }
 main article .addAnnc{
   background: var(--white);
@@ -223,9 +222,10 @@ main article .addAnnc{
   width: 100%;
 }
 .course-modal article{
+  background: #fff;
   display: none;
   flex-direction: column;
-  background: #fff;
+  gap: 12px;
   overflow: hidden auto;
   width: 900px;
   height: 90vh;
@@ -273,5 +273,4 @@ main article .addAnnc{
   #announcementForm .mid .galleryImages{
     grid-template-columns: repeat(2, 1fr);
   }
-
 }

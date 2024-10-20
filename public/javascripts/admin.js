@@ -28,7 +28,7 @@ const addGalleryImg = galleryUl.querySelector('.addImg');
 
 ancGalleryImg.addEventListener('change', (e) => {
   const files = e.target.files;
-
+  
   for(const file of files){
     if(file && file.type.startsWith('image/')){
       const li = document.createElement('li');
@@ -69,10 +69,11 @@ anncForm.addEventListener('submit', (e) => {
   
   const title = anncForm.querySelector('#ancTitle').value;
   const description = anncForm.querySelector('#ancDescription').value;
-  const mainImg = document.getElementById('ancMainImg').files[0].name;
-  const galleryImgList = document.getElementById('ancGalleryImg').files;
-  
-  if(!mainImg){
+  const galleryImgList = ancGalleryImg.files;
+  const ancMainImgName = ancMainImg.files[0].name;
+
+  if(!ancMainImgName){
+    errorMsg.innerText = '*No cover photo selected';
     errorMsg.style.opacity = '1';
     return;
   }
@@ -81,7 +82,7 @@ anncForm.addEventListener('submit', (e) => {
   const data = {
     title: title,
     description: description,
-    mainImg: `../images/${mainImg}`,
+    mainImg: `../images/${ancMainImgName}`,
     galleryImgs: [],
   };
 
@@ -100,6 +101,18 @@ anncForm.addEventListener('submit', (e) => {
       clearForm();
     }
   });
+
+  // fetch('/admin/ancUpdate', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(data),
+  // })
+  // .then(response => response.json())
+  // .then(res => {
+  //   if(res.success){
+  //     clearForm();
+  //   }
+  // });
 });
 
 const mainTabs = document.querySelectorAll('[data-nav-tabs]');
@@ -123,6 +136,9 @@ mainTabs.forEach((tab) => {
 });
 
 const anncPreviewUL = document.querySelector('.anncPreview').children;
+const courseModal = document.querySelector('.course-modal');
+const article = courseModal.querySelectorAll('article');
+const h1 = courseModal.querySelector('.anncModal h1');
 
 for(const li of anncPreviewUL){
   const main = li.querySelector('.ancMain');
@@ -135,7 +151,7 @@ for(const li of anncPreviewUL){
   new imageViewer(gal);
 
   edit.addEventListener('click', () =>{
-
+    
   });
   del.addEventListener('click', () =>{
     modalPN().confirm({
@@ -168,11 +184,10 @@ for(const li of anncPreviewUL){
   });
 }
 
-const courseModal = document.querySelector('.course-modal');
-const article = courseModal.querySelectorAll('article');
-
-function openModal(className){
+function openModal(className, type){
   courseModal.classList.add('show');
+  h1.innerText = `${type} Announcement`;
+
   for(const tag of article){
     if(tag.classList.contains(className)){
       tag.classList.add('show');
