@@ -65,14 +65,19 @@ class imageViewer{
       left: '0',
       display: 'none',
       justifyContent: 'center',
+      alignContent: 'center',
       paddingBlock: '50px',
       height: '100vh',
       width: '100%',
       zIndex: '10',
     });
     Object.assign(selectedImg.style, {
-      objectFit: 'contain',
-      maxWidth: 'calc(100% - 120px)',
+      display: 'block',
+      alignSelf: 'center',
+      height: 'fit-content',
+      maxHeight: '100%',
+      width: 'auto',
+      maxWidth: 'calc(100% - 70px)',
       userSelect: 'none',
     });
     Object.assign(ul.style, {

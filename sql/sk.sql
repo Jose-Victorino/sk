@@ -27,12 +27,10 @@ CREATE TABLE IF NOT EXISTS images (
 CREATE TABLE IF NOT EXISTS comments (
     CommentID INTEGER,
     AnnouncementID INTEGER NOT NULL,
-    UserID INTEGER NOT NULL,
     Text LONGTEXT,
     CommentDate DATETIME,
     PRIMARY KEY (CommentID),
-    FOREIGN KEY (AnnouncementID) REFERENCES announcement(AnnouncementID),
-    FOREIGN KEY (UserID) REFERENCES announcement(UserID)
+    FOREIGN KEY (AnnouncementID) REFERENCES announcement(AnnouncementID)
 );
 CREATE TABLE IF NOT EXISTS `council members` (
     CouncilID INTEGER,
@@ -62,8 +60,10 @@ SELECT * FROM announcement;
 SELECT * FROM admin;
 SELECT * FROM `council members`;
 
+/*
 DROP TABLE images;
 DROP TABLE comments;
 DROP TABLE announcement;
 DROP TABLE admin;
 DROP TABLE `council members`;
+*/

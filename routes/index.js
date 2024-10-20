@@ -4,7 +4,7 @@ var con = require('../config/db');
 
 const loadData = () => {
   const announcementsQuery = new Promise((resolve, reject) => {
-    con.all('SELECT * FROM announcement', function(err, rows){
+    con.all('SELECT * FROM announcement ORDER BY DatePosted DESC', function(err, rows){
       if(err){
         console.error('Cannot load announcements data');
         reject(err);
@@ -102,9 +102,8 @@ router.get('/admin/ancGet', function(req, res, next){
 // ANNOUNCEMENT
 router.post('/admin/ancAdd', function(req, res, next){
   const { title, description, mainImg, galleryImgs } = req.body;
-  const today = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-  con.run('INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(?, ?, ?, ?)', [1, title, description, today], function (err){
+  con.run('INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(?, ?, ?, ?)', [1, title, description, new Date()], function (err){
     if(err){
       console.log('Cannot add data', err);
       return res.status(500).json({ success: false, message: 'Error inserting data' });
@@ -118,56 +117,50 @@ router.post('/admin/ancAdd', function(req, res, next){
         return res.status(500).json({ success: false, message: 'Error inserting main image' });
       }
     });
-    galleryImgs.forEach((galleryImg) => {
+    for(const galleryImg of galleryImgs){
       con.run('INSERT INTO images (AnnouncementID, ImageType, ImagePath) VALUES(?, ?, ?)', [announcementId, 'gallery', galleryImg], (err) => {
         if(err){
           console.log('Error inserting gallery image', err);
           return res.status(500).json({ success: false, message: 'Error inserting gallery image' });
         }
       });
-    });
+    }
 
     res.status(200).json({ success: true, message: 'Record successfully added!' });
   });
 });
-router.post('/admin/ancUpdate/:id', function(req, res, next){
-  const { id } = req.params;
-  const { title, description, mainImg, galleryImgs } = req.body;
-  const userData = {
-    AdminID: 1, // TO CHANGE
-    Title: title,
-    Description: description,
-    DatePosted: new Date(),
-  };
+router.post('/admin/ancUpdate', function(req, res, next){
+  const { id, title, description, mainImg, galleryImgs } = req.body;
 
-  con.query('UPDATE announcement SET ?  WHERE AnnouncementID = ?', [userData, id], (err, row) => {
+  con.run('UPDATE announcement SET AdminID = ?, Title = ?, Description = ? WHERE AnnouncementID = ?', [1, title, description, id], (err, row) => {
     if(err){
-      console.error('Cannot update data');
-    }
-    else{
-      console.log('Record successfully updated!');
+      return res.status(500).json({ success: false, message: 'Error updating announcement' });
     }
   });
 });
-router.post('/admin/ancDelete/:id', function(req, res, next){
-  var { id } = req.params;
+router.post('/admin/ancDelete', function(req, res, next){
+  var { id } = req.body;
   
-  con.query('DELETE FROM announcement WHERE AnnouncementID = ?', id, (err, row) => {
+  con.run('DELETE FROM images WHERE AnnouncementID = ?', id, (err, row) => {
     if(err){
-      console.error('Cannot delete data');
-    }
-    else{
-      console.log('Record successfully deleted!');
+      console.log('Error deleting announcement', err);
+      return res.status(500).json({ success: false, message: 'Error deleting announcement' });
     }
   });
-  con.query('DELETE FROM images WHERE AnnouncementID = ?', id, (err, row) => {
+  con.run('DELETE FROM comments WHERE AnnouncementID = ?', id, (err, row) => {
     if(err){
-      console.error('Cannot delete data');
-    }
-    else{
-      console.log('Record successfully deleted!');
+      console.log('Error deleting announcement', err);
+      return res.status(500).json({ success: false, message: 'Error deleting announcement' });
     }
   });
+  con.run('DELETE FROM announcement WHERE AnnouncementID = ?', id, (err, row) => {
+    if(err){
+      console.log('Error deleting announcement', err);
+      return res.status(500).json({ success: false, message: 'Error deleting announcement' });
+    }
+  });
+
+  res.status(200).json({ success: true, message: 'Record successfully deleted!' });
 });
 
 module.exports = router;

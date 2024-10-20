@@ -1,5 +1,5 @@
 :root{
-  --baseWidth: 220px;
+  --baseWidth: 200px;
   --sidebarWidth: clamp(150px, 1.875rem + 21.4286vw, 180px);
 }
 body{
@@ -19,9 +19,7 @@ main article{
   display: none;
   flex-direction: column;
   padding: 20px;
-}
-main article > *{
-  margin-bottom: 40px;
+  gap: 20px;
 }
 [data-nav-windows].show{
   display: flex;
@@ -29,6 +27,12 @@ main article > *{
 article h1{
   font-size: var(--fs-20-24);
   margin-bottom: 10px;
+}
+main article .addAnnc{
+  background: var(--white);
+  padding: 8px 14px;
+  border: solid 1px var(--l-gray-2);
+  width: fit-content;
 }
 #announcementForm > *:not(:last-child){
   margin-bottom: 20px;
@@ -55,7 +59,8 @@ article h1{
   border-bottom: 1px solid hsl(0, 0%, 65%);
 }
 #announcementForm .top input[type="text"]{
-  width: clamp(200px, 50%, 300px);
+  max-width: 300px;
+  width: 100%;
 }
 #announcementForm .top input[type="date"]{
   width: fit-content;
@@ -92,19 +97,34 @@ article h1{
   /* object-fit: contain; */
   height: var(--baseWidth);
 }
+#announcementForm .titleCont{
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
 #announcementForm .mid .galleryImages{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
 }
 #announcementForm .mid .galleryImages li{
+  position: relative;
   display: flex;
   aspect-ratio: 1;
 }
-#announcementForm .mid .galleryImages img{
+#announcementForm .mid .galleryImages li > img{
   object-fit: cover;
   height: 100%;
   width: 100%;
+}
+#announcementForm .mid .galleryImages button{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 16px;
+}
+#announcementForm .mid .galleryImages button img{
+  width: inherit;
 }
 #announcementForm .mid label[for="ancGalleryImg"]{
   height: 100%;
@@ -133,76 +153,125 @@ article h1{
 #announcementForm .bottom button{
   background: var(--white);
   padding: 8px 14px;
-  border: solid 1px var(--l-gray-1);
+  border: solid 1px var(--l-gray-2);
   width: fit-content;
 }
-.annc-preview{
+.anncPreview{
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-.annc-preview li{
+.anncPreview li{
   background: var(--l-gray-1);
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 15px;
   padding: 15px;
 }
-.annc-preview li > div{
+.anncPreview .ancMain{
   display: flex;
   gap: 15px;
 }
-.annc-preview .mainImg{
-  height: 250px;
+.anncPreview .mainImg{
+  height: 220px;
 }
-.annc-preview .txt{
+.anncPreview .txt{
   display: flex;
   flex-direction: column;
 }
-.annc-preview .txt span{
+.anncPreview .txt span{
   font-size: var(--fs-12-14);
   margin: 7px 0 12px;
 }
-.annc-preview .ancGallery{
+.anncPreview .icon{
+  background: var(--l-gray-2);
+  position: absolute;
+  padding: 10px 12px;
+  top: 0px;
+  right: 0px;
   display: flex;
+  gap: 10px;
+}
+.anncPreview .icon svg{
+  height: var(--fs-16-20);
+  cursor: pointer;
+}
+.anncPreview .ancGallery{
+  display: none;
+}
+.anncPreview .ancGallery:has(> img){
+  display: flex;
+  width: 100%;
+  overflow: auto hidden;
   gap: 5px;
 }
-.annc-preview .ancGallery img{
-  height: 150px;
+.anncPreview .ancGallery img{
+  height: 130px;
+}
+
+.course-modal.show,
+.course-modal article.show{ display: flex; }
+.course-modal{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: hsla(222, 2%, 6%, 60%);
+  z-index: 10;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
+.course-modal article{
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  overflow: hidden auto;
+  width: 900px;
+  height: 90vh;
+  padding: 20px;
+  box-shadow: 0 0 90px hsla(0, 0%, 0%, 0.35);
+}
+.course-modal .closeBtn{
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  width: 20px;
+  color: var(--white-1);
 }
 
 /* --==Responsive==-- */
 @media(max-width: 1400px){
-  :root{
-    --cont-width: 1200px;
-  }
 
 }
 @media(max-width: 1250px){
-  :root{
-    --cont-width: 900px;
-  }
 
 }
 @media(max-width: 940px){
-  :root{
-    --cont-width: 720px;
+  .anncPreview .mainImg{
+    height: 200px;
+  }
+  .anncPreview .ancGallery img{
+    height: 100px;
   }
 }
 @media(max-width: 780px){
-  :root{
-    --cont-width: 520px;
+  .anncPreview .ancMain{
+    flex-direction: column;
+    width: fit-content;
   }
-
+  .anncPreview .mainImg{
+    width: fit-content;
+    height: 170px;
+    margin-inline: auto;
+  }
+  .anncPreview .ancGallery img{
+    height: 80px;
+  }
 }
 @media(max-width: 560px){
-  :root{
-    --cont-width: calc(100% - 30px);
-  }
-
   #announcementForm .mid .galleryImages{
     grid-template-columns: repeat(2, 1fr);
   }
 
-  td, th{ padding: 3px; }
 }
