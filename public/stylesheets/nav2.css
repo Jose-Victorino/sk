@@ -1,0 +1,94 @@
+nav{
+  --mainBackground: hsl(0, 0%, 90%);
+  --NavTextColor: hsl(0, 0%, 20%);
+  --NavFontSize: var(--fs-12-14, 14px);
+  --subNavBorder: 1px solid hsl(0, 0%, 80%);
+
+  background: var(--mainBackground);
+  color: var(--NavTextColor);
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  height: 100vh;
+}
+
+nav .navLinks{
+  width: max-content;
+}
+nav .navLinks a{
+  text-decoration: none;
+  text-transform: uppercase;
+  color: var(--NavTextColor);
+  font-size: var(--NavFontSize);
+  display: grid;
+  grid-template-columns: max-content 0fr;
+  gap: 0px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: grid-template-columns 0.3s, gap 0.3s;
+}
+nav .navLinks a img{
+  width: 20px;
+}
+nav .navLinks a p{
+  max-width: max-content;
+  white-space: nowrap;
+  overflow: hidden;
+}
+nav:hover .navLinks a{
+  gap: 8px;
+  grid-template-columns: max-content 1fr;
+}
+
+/* nav .logo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+nav .logo img{
+  height: 40px;
+  width: 40px;
+}
+nav .logo{
+  padding: 15px;
+}
+nav .navLinks .hasSubNav{
+  display: grid;
+  grid-template-rows: max-content 0fr;
+  position: relative;
+}
+nav .navLinks .hasSubNav.show{
+  grid-template-rows: max-content 1fr;
+}
+nav .navLinks .hasSubNav a{
+  display: flex;
+  justify-content: space-between;
+}
+nav .navLinks .hasSubNav li > :where(a, div){
+  padding-left: 8px;
+}
+nav .navLinks img{
+  width: 14px;
+  transition: transform 0.3s;
+}
+nav ul > li div{
+  gap: 5px;
+}
+nav .navLinks .hasSubNav.show > div > img{
+  transform: rotate(180deg);
+}
+nav .navLinks .hasSubNav div + ul{
+  overflow: hidden;
+}
+nav .navLinks li .subNav{
+  margin-left: 10px;
+  border-left: var(--subNavBorder);
+} */
+
+@media(min-width: 561px){
+  
+}
+@media(max-width: 560px){
+  
+}

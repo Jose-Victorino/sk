@@ -4,30 +4,34 @@ const mainLabel = anncForm.querySelector('label[for="ancMainImg"]');
 const mainImagePreview = mainLabel.querySelector('.imagePreview');
 const mainImgP = mainLabel.querySelector('p');
 const errorMsg = anncForm.querySelector('.errorMsg');
+let formType;
 
 ancMainImg.addEventListener('change', (e) => {
   const file = e.target.files[0];
 
   if(file && file.type.startsWith('image/')){
-    mainImagePreview.src = URL.createObjectURL(file);
-    mainLabel.classList.add('hasImg');
+    mainImagePreview.src = `../images/${file.name}`;
     mainImagePreview.style.display = 'block';
+    mainLabel.classList.add('hasImg');
     mainImgP.style.display = 'none';
   }
   else{
     mainImagePreview.src = '';
-    mainLabel.classList.remove('hasImg');
     mainImagePreview.style.display = 'none';
+    mainLabel.classList.remove('hasImg');
     mainImgP.style.display = 'block';
   }
 });
 
 const ancGalleryImg = anncForm.querySelector('#ancGalleryImg');
 const galleryUl = anncForm.querySelector('.galleryImages');
-const addGalleryImg = galleryUl.querySelector('.addImg');
+const ancTitle = anncForm.querySelector('#ancTitle');
+const ancDescription = anncForm.querySelector('#ancDescription');
+const updateId = anncForm.querySelector('[type=hidden]');
 
 ancGalleryImg.addEventListener('change', (e) => {
   const files = e.target.files;
+  const addGalleryImg = galleryUl.querySelector('.addImg');
   
   for(const file of files){
     if(file && file.type.startsWith('image/')){
@@ -67,22 +71,27 @@ const clearForm = () => {
 anncForm.addEventListener('submit', (e) => {
   e.preventDefault();
   
-  const title = anncForm.querySelector('#ancTitle').value;
-  const description = anncForm.querySelector('#ancDescription').value;
+  const title = ancTitle.value;
+  const description = ancDescription.value;
+  const mainImg = mainImagePreview.src;
   const galleryImgList = ancGalleryImg.files;
-  const ancMainImgName = ancMainImg.files[0].name;
 
-  if(!ancMainImgName){
-    errorMsg.innerText = '*No cover photo selected';
+  if(!mainImg){
+    errorMsg.innerText = '*No cover photo selected.';
+    errorMsg.style.opacity = '1';
+    return;
+  }
+  if(galleryUl.children.length > 11){
+    errorMsg.innerText = '*Maximum gallery images is 10.';
     errorMsg.style.opacity = '1';
     return;
   }
   errorMsg.style.opacity = '0';
   
   const data = {
-    title: title,
-    description: description,
-    mainImg: `../images/${ancMainImgName}`,
+    title,
+    description,
+    mainImg,
     galleryImgs: [],
   };
 
@@ -90,49 +99,52 @@ anncForm.addEventListener('submit', (e) => {
     data.galleryImgs.push(`../images/${img.name}`);
   }
   
-  fetch('/admin/ancAdd', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  })
-  .then(response => response.json())
-  .then(res => {
-    if(res.success){
-      clearForm();
-    }
-  });
+  if(formType === 'Add'){
+    fetch('/admin/ancAdd', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(res => {
+      if(res.success){
+        clearForm();
+      }
+    });
+  }
+  if(formType === 'Edit'){
+    data.id = updateId.value;
 
-  // fetch('/admin/ancUpdate', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(data),
-  // })
-  // .then(response => response.json())
-  // .then(res => {
-  //   if(res.success){
-  //     clearForm();
-  //   }
-  // });
+    fetch('/admin/ancUpdate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(res => {
+      if(res.success){
+        clearForm();
+      }
+    });
+  }
 });
 
 const mainTabs = document.querySelectorAll('[data-nav-tabs]');
 const mainWindows = document.querySelectorAll('[data-nav-windows]');
 
 mainTabs.forEach((tab) => {
-  const activateTab = () => {
+  tab.addEventListener('click', () => {
     mainWindows.forEach((window, i) => {
       if (tab.dataset.navTabs === window.dataset.navWindows) {
         mainTabs[i].classList.add('selected');
         window.classList.add('show');
-      } else {
+      }
+      else{
         mainTabs[i].classList.remove('selected');
         window.classList.remove('show');
       }
     });
-  };
-
-  tab.addEventListener('click', activateTab);
-  tab.addEventListener('touchstart', activateTab);
+  });
 });
 
 const anncPreviewUL = document.querySelector('.anncPreview').children;
@@ -143,15 +155,44 @@ const h1 = courseModal.querySelector('.anncModal h1');
 for(const li of anncPreviewUL){
   const main = li.querySelector('.ancMain');
   const gal = li.querySelector('.ancGallery');
+  const galImgs = gal.getElementsByTagName('img');
   const edit = li.querySelector('.edit');
   const del = li.querySelector('.delete');
   const id = li.querySelector('input').value;
-
+  const mainImg = li.querySelector('.mainImg').src;
+  const h2 = li.querySelector('.txt h2').innerText;
+  const p = li.querySelector('.txt p').innerText;
+  
   new imageViewer(main);
   new imageViewer(gal);
-
+  
   edit.addEventListener('click', () =>{
+    const addGalleryImg = galleryUl.querySelector('.addImg');
+    updateId.value = li.querySelector('[type=hidden]').value;
     
+    ancTitle.value = h2;
+    ancDescription.value = p;
+    mainImagePreview.src = mainImg;
+    mainImagePreview.style.display = 'block';
+    mainLabel.classList.add('hasImg');
+    mainImgP.style.display = 'none';
+    for(const galImg of galImgs){
+      const li = document.createElement('li');
+      const img = document.createElement('img');
+      const btn = document.createElement('button');
+      
+      btn.type = 'button';
+      btn.innerHTML = `<img src="../images/svg/xmark.svg" loading="lazy" alt="xmark">`
+      img.src = galImg.src;
+      li.appendChild(btn);
+      li.appendChild(img);
+      addGalleryImg.before(li);
+
+      btn.addEventListener('click', () => {
+        galleryUl.removeChild(li);
+      });
+    }
+
   });
   del.addEventListener('click', () =>{
     modalPN().confirm({
@@ -185,12 +226,15 @@ for(const li of anncPreviewUL){
 }
 
 function openModal(className, type){
+  
   courseModal.classList.add('show');
   h1.innerText = `${type} Announcement`;
-
+  formType = type;
+  
   for(const tag of article){
     if(tag.classList.contains(className)){
       tag.classList.add('show');
+      tag.scrollTop = 0; 
     }
   }
 }

@@ -16,11 +16,18 @@ CREATE TABLE IF NOT EXISTS announcement (
     PRIMARY KEY (AnnouncementID),
     FOREIGN KEY (AdminID) REFERENCES admin(AdminID)
 );
-CREATE TABLE IF NOT EXISTS images (
+CREATE TABLE IF NOT EXISTS `main image` (
     ImageID INTEGER,
     AnnouncementID INTEGER NOT NULL,
-    ImageType TEXT CHECK(ImageType IN ('main','gallery')) NOT NULL,
     ImagePath VARCHAR(255) NOT NULL,
+    PRIMARY KEY (ImageID),
+    FOREIGN KEY (AnnouncementID) REFERENCES announcement(AnnouncementID)
+);
+CREATE TABLE IF NOT EXISTS `gallery images` (
+    ImageID INTEGER,
+    AnnouncementID INTEGER NOT NULL,
+    Pos INTEGER NOT NULL,
+    ImagePath VARCHAR(255),
     PRIMARY KEY (ImageID),
     FOREIGN KEY (AnnouncementID) REFERENCES announcement(AnnouncementID)
 );
@@ -42,26 +49,35 @@ CREATE TABLE IF NOT EXISTS `council members` (
     PRIMARY KEY (CouncilID)
 );
 
-INSERT INTO admin (FirstName, LastName, Username, Email, Password) VALUES("last", "first", "bim", "@fafe", "qwerty");
+--INSERT INTO admin (FirstName, LastName, Username, Email, Password) VALUES("last", "first", "bim", "@fafe", "qwerty");
 --UPDATE admin SET FirstName = "", LastName = "", Username = "", Email = "", Password = "" WHERE AdminID = ;
 --DELETE FROM admin WHERE AdminID = ;
 
---INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(, "", "", "", "");
---UPDATE announcement SET Title = "", Description = "", ScheduledDate = "", DatePosted = ""  WHERE AnnouncementID = ;
+--INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(, "", "", "");
+--UPDATE announcement SET AdminID = , Title = "", Description = ""  WHERE AnnouncementID = ;
 --DELETE FROM announcement WHERE AnnouncementID = ;
 
---INSERT INTO images (AnnouncementID, ImageType, ImagePath) VALUES("", "", "");
+--INSERT INTO `main image` (AnnouncementID, ImagePath) VALUES(, "");
+--UPDATE `main image` SET ImagePath = "" WHERE AnnouncementID = ;
 --DELETE FROM images WHERE AnnouncementID = ;
 
+--INSERT INTO `gallery images` (AnnouncementID, Pos, ImagePath) VALUES(, , "");
+--UPDATE `gallery images` SET ImagePath = "" WHERE Pos =  AND AnnouncementID = ;
+--DELETE FROM images WHERE AnnouncementID = ;
 
-SELECT * FROM images;
+--INSERT INTO comments (AnnouncementID, Text, CommentDate) VALUES(, "", "");
+--DELETE FROM comments WHERE AnnouncementID = ;
+
+SELECT * FROM `main image`;
+SELECT * FROM `gallery images` WHERE ImagePath NOT NULL ORDER BY Pos ASC;
 SELECT * FROM comments;
 SELECT * FROM announcement;
 SELECT * FROM admin;
 SELECT * FROM `council members`;
 
 /*
-DROP TABLE images;
+DROP TABLE `main image`;
+DROP TABLE `gallery images`;
 DROP TABLE comments;
 DROP TABLE announcement;
 DROP TABLE admin;

@@ -12,8 +12,17 @@ const loadData = () => {
       resolve(rows);
     });
   });
-  const imagesQuery = new Promise((resolve, reject) => {
-    con.all('SELECT * FROM images', function(err, rows){
+  const mainImagesQuery = new Promise((resolve, reject) => {
+    con.all('SELECT * FROM `main image`', function(err, rows){
+      if(err){
+        console.error('Cannot load images data');
+        reject(err);
+      }
+      resolve(rows);
+    });
+  });
+  const galImagesQuery = new Promise((resolve, reject) => {
+    con.all('SELECT * FROM `gallery images` WHERE ImagePath NOT NULL ORDER BY Pos ASC', function(err, rows){
       if(err){
         console.error('Cannot load images data');
         reject(err);
@@ -40,16 +49,17 @@ const loadData = () => {
   //   });
   // });
 
-  return Promise.all([announcementsQuery, imagesQuery, commentsQuery])
+  return Promise.all([announcementsQuery, mainImagesQuery, galImagesQuery, commentsQuery])
 }
 
 // HOME
 router.get('/', function(req, res, next){
   loadData()
-  .then(([announcements, images, comments]) => {
+  .then(([announcements, mainImages, galImages, comments]) => {
     res.render('index', {
       announcements: announcements || [],
-      images: images || [],
+      mainImages: mainImages || [],
+      galImages: galImages || [],
       comments: comments || [],
     });
   })
@@ -64,10 +74,11 @@ router.get('/', function(req, res, next){
 // ADMIN
 router.get('/admin', function(req, res, next){
   loadData()
-  .then(([announcements, images, comments]) => {
+  .then(([announcements, mainImages, galImages, comments]) => {
     res.render('admin', {
       announcements: announcements || [],
-      images: images || [],
+      mainImages: mainImages || [],
+      galImages: galImages || [],
       comments: comments || [],
     });
   })
@@ -82,12 +93,13 @@ router.get('/admin', function(req, res, next){
 
 router.get('/admin/ancGet', function(req, res, next){
   loadData()
-  .then(([announcements, images, comments]) => {
+  .then(([announcements, mainImages, galImages, comments]) => {
     res.status(200).json({
       success: true,
       message: 'All data successfully loaded!',
       announcements: announcements || [],
-      images: images || [],
+      mainImages: mainImages || [],
+      galImages: galImages || [],
       comments: comments || [],
     });
   })
@@ -103,30 +115,27 @@ router.get('/admin/ancGet', function(req, res, next){
 router.post('/admin/ancAdd', function(req, res, next){
   const { title, description, mainImg, galleryImgs } = req.body;
 
-  con.run('INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(?, ?, ?, ?)', [1, title, description, new Date()], function (err){
+  con.run('INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(?, ?, ?, ?)', [1, title, description, new Date().toISOString()], function (err){
     if(err){
-      console.log('Cannot add data', err);
       return res.status(500).json({ success: false, message: 'Error inserting data' });
     }
     
     const announcementId = this.lastID;
     
-    con.run('INSERT INTO images (AnnouncementID, ImageType, ImagePath) VALUES(?, ?, ?)', [announcementId, 'main', mainImg], (err) => {
+    con.run('INSERT INTO `main image` (AnnouncementID, ImagePath) VALUES(?, ?)', [announcementId, mainImg], (err) => {
       if(err){
-        console.log('Cannot add image', err);
         return res.status(500).json({ success: false, message: 'Error inserting main image' });
       }
     });
-    for(const galleryImg of galleryImgs){
-      con.run('INSERT INTO images (AnnouncementID, ImageType, ImagePath) VALUES(?, ?, ?)', [announcementId, 'gallery', galleryImg], (err) => {
+    for(let i = 0; i < 10; i++){
+      con.run('INSERT INTO `gallery images` (AnnouncementID, Pos, ImagePath) VALUES(?, ?, ?)', [announcementId, i, galleryImgs[i]], (err) => {
         if(err){
-          console.log('Error inserting gallery image', err);
           return res.status(500).json({ success: false, message: 'Error inserting gallery image' });
         }
       });
     }
 
-    res.status(200).json({ success: true, message: 'Record successfully added!' });
+    res.status(200).json({ success: true, message: 'Records successfully added!' });
   });
 });
 router.post('/admin/ancUpdate', function(req, res, next){
@@ -137,30 +146,46 @@ router.post('/admin/ancUpdate', function(req, res, next){
       return res.status(500).json({ success: false, message: 'Error updating announcement' });
     }
   });
+  con.run('UPDATE `main image` SET ImagePath = ? WHERE AnnouncementID = ?', [mainImg, id], (err, row) => {
+    if(err){
+      return res.status(500).json({ success: false, message: 'Error updating main image' });
+    }
+  });
+  for(let i = 0; i < 10; i++){
+    con.run('UPDATE `gallery images` SET ImagePath = ? WHERE Pos = ? AND AnnouncementID = ?', [galleryImgs[i], i, id], (err, row) => {
+      if(err){
+        return res.status(500).json({ success: false, message: 'Error updating gallery images' });
+      }
+    });
+  }
+
+  res.status(200).json({ success: true, message: 'Records successfully updated!' });
 });
 router.post('/admin/ancDelete', function(req, res, next){
   var { id } = req.body;
   
-  con.run('DELETE FROM images WHERE AnnouncementID = ?', id, (err, row) => {
+  con.run('DELETE FROM `main image` WHERE AnnouncementID = ?', id, (err, row) => {
     if(err){
-      console.log('Error deleting announcement', err);
+      return res.status(500).json({ success: false, message: 'Error deleting announcement' });
+    }
+  });
+  con.run('DELETE FROM `gallery images` WHERE AnnouncementID = ?', id, (err, row) => {
+    if(err){
       return res.status(500).json({ success: false, message: 'Error deleting announcement' });
     }
   });
   con.run('DELETE FROM comments WHERE AnnouncementID = ?', id, (err, row) => {
     if(err){
-      console.log('Error deleting announcement', err);
       return res.status(500).json({ success: false, message: 'Error deleting announcement' });
     }
   });
   con.run('DELETE FROM announcement WHERE AnnouncementID = ?', id, (err, row) => {
     if(err){
-      console.log('Error deleting announcement', err);
       return res.status(500).json({ success: false, message: 'Error deleting announcement' });
     }
   });
 
-  res.status(200).json({ success: true, message: 'Record successfully deleted!' });
+  res.status(200).json({ success: true, message: 'Records successfully deleted!' });
 });
 
 module.exports = router;

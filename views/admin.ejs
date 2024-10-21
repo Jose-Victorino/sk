@@ -80,6 +80,7 @@
       <h1></h1>
       <form id="announcementForm" enctype="multipart/form-data">
         <div class="top">
+          <input type="hidden">
           <input type="file" name="ancMainImg" id="ancMainImg" accept="image/*" hidden>
           <div>
             <label for="ancMainImg">
@@ -112,7 +113,7 @@
           <span class="errorMsg">*No cover photo selected</span>
           <div>
             <button type="reset" onclick="clearForm()">Clear</button>
-            <button type="submit">Post</button>
+            <button type="submit">Submit</button>
           </div>
         </div>
       </form>
@@ -144,10 +145,9 @@
           %>
           <input type="hidden" value="<%= AnnouncementID %>">
           <div class="ancMain">
-            <% for(const img of images){ %>
-              <% const { ImageType, ImagePath } = img; %>
-              <% if(ImageType === 'main' && img.AnnouncementID === AnnouncementID){ %>
-                <img data-main-img class="mainImg" src="<%= ImagePath %>" loading="lazy" alt="main image">
+            <% for(const img of mainImages){ %>
+              <% if(img.AnnouncementID === AnnouncementID){ %>
+                <img class="mainImg" src="<%= img.ImagePath %>" loading="lazy" alt="main image">
               <% } %>
             <% } %>
             <div class="txt">
@@ -157,10 +157,9 @@
             </div>
           </div>
           <div class="ancGallery">
-            <% for(const img of images){ %>
-              <% const { ImageType, ImagePath } = img; %>
-              <% if(ImageType === 'gallery' && img.AnnouncementID === AnnouncementID){ %>
-                <img data-main-img src="<%= ImagePath %>" loading="lazy" alt="gallery image">
+            <% for(const img of galImages){ %>
+              <% if(img.AnnouncementID === AnnouncementID){ %>
+                <img src="<%= img.ImagePath %>" loading="lazy" alt="gallery image">
               <% } %>
             <% } %>
           </div>
