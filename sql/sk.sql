@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `council members` (
     FirstName VARCHAR(45) NOT NULL,
     MiddleInitial VARCHAR(45) NOT NULL,
     LastName VARCHAR(45) NOT NULL,
-    Position TEXT CHECK(Position IN ('Chairperson', 'Co-Chairperson', 'Treasurer', 'Secretary', 'SK Kagawad')) NOT NULL,
+    Position TEXT CHECK(Position IN ('Chairman', 'SK Treasurer', 'SK Secretary', 'SK Councilor')) NOT NULL,
     Image VARCHAR(255) NOT NULL,
     PRIMARY KEY (CouncilID)
 );
@@ -83,3 +83,7 @@ DROP TABLE announcement;
 DROP TABLE admin;
 DROP TABLE `council members`;
 */
+
+INSERT INTO `council members` (FirstName, MiddelInitial, LastName, Position, Image)
+VALUES(1);
+

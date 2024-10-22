@@ -259,7 +259,7 @@ main article .addAnnc{
 @media(max-width: 780px){
   .anncPreview .ancMain{
     flex-direction: column;
-    width: fit-content;
+    width: 100%;
   }
   .anncPreview .mainImg{
     width: fit-content;
