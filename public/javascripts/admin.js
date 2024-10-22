@@ -12,12 +12,14 @@ ancMainImg.addEventListener('change', (e) => {
   if(file && file.type.startsWith('image/')){
     mainImagePreview.src = `../images/${file.name}`;
     mainImagePreview.style.display = 'block';
+    mainImagePreview.dataset.imgName = file.name;
     mainLabel.classList.add('hasImg');
     mainImgP.style.display = 'none';
   }
   else{
     mainImagePreview.src = '';
     mainImagePreview.style.display = 'none';
+    mainImagePreview.dataset.imgName = '';
     mainLabel.classList.remove('hasImg');
     mainImgP.style.display = 'block';
   }
@@ -41,7 +43,9 @@ ancGalleryImg.addEventListener('change', (e) => {
       
       btn.type = 'button';
       btn.innerHTML = `<img src="../images/svg/xmark.svg" loading="lazy" alt="xmark">`
+      img.classList.add('galImg');
       img.src = URL.createObjectURL(file);
+      img.dataset.imgName = file.name;
       li.appendChild(btn);
       li.appendChild(img);
       addGalleryImg.before(li);
@@ -73,15 +77,16 @@ anncForm.addEventListener('submit', (e) => {
   
   const title = ancTitle.value;
   const description = ancDescription.value;
-  const mainImg = mainImagePreview.src;
-  const galleryImgList = ancGalleryImg.files;
+  const mainImg = mainImagePreview.dataset.imgName;
+  const galleryImgs = galleryUl.querySelectorAll('.galImg');
 
   if(!mainImg){
     errorMsg.innerText = '*No cover photo selected.';
     errorMsg.style.opacity = '1';
     return;
   }
-  if(galleryUl.children.length > 11){
+  
+  if(galleryImgs.length > 10){
     errorMsg.innerText = '*Maximum gallery images is 10.';
     errorMsg.style.opacity = '1';
     return;
@@ -91,12 +96,12 @@ anncForm.addEventListener('submit', (e) => {
   const data = {
     title,
     description,
-    mainImg,
+    mainImg: `../images/${mainImg}`,
     galleryImgs: [],
   };
 
-  for(const img of galleryImgList){
-    data.galleryImgs.push(`../images/${img.name}`);
+  for(const img of galleryImgs){
+    data.galleryImgs.push(`../images/${img.dataset.imgName}`);
   }
   
   if(formType === 'Add'){
@@ -109,6 +114,7 @@ anncForm.addEventListener('submit', (e) => {
     .then(res => {
       if(res.success){
         closeModal();
+        getAnnouncements();
       }
     });
   }
@@ -124,6 +130,7 @@ anncForm.addEventListener('submit', (e) => {
     .then(res => {
       if(res.success){
         closeModal();
+        getAnnouncements();
       }
     });
   }
@@ -151,48 +158,11 @@ const anncPreviewUL = document.querySelector('.anncPreview').children;
 const courseModal = document.querySelector('.course-modal');
 const article = courseModal.querySelectorAll('article');
 const h1 = courseModal.querySelector('.anncModal h1');
-
-for(const li of anncPreviewUL){
-  const gal = li.querySelector('.ancGallery');
-  const galImgs = gal.getElementsByTagName('img');
-  const edit = li.querySelector('.edit');
-  const mainImg = li.querySelector('.mainImg').src;
-  const h2 = li.querySelector('.txt h2').innerText;
-  const p = li.querySelector('.txt p').innerText;
-
-  // edit.addEventListener('click', () =>{
-  //   const addGalleryImg = galleryUl.querySelector('.addImg');
-
-  //   updateId.value = li.querySelector('[type=hidden]').value;
-  //   ancTitle.value = h2;
-  //   ancDescription.value = p;
-  //   mainImagePreview.src = mainImg;
-  //   mainImagePreview.style.display = 'block';
-  //   mainLabel.classList.add('hasImg');
-  //   mainImgP.style.display = 'none';
-
-  //   for(const galImg of galImgs){
-  //     const li = document.createElement('li');
-  //     const img = document.createElement('img');
-  //     const btn = document.createElement('button');
-      
-  //     btn.type = 'button';
-  //     btn.innerHTML = `<img src="../images/svg/xmark.svg" loading="lazy" alt="xmark">`
-  //     img.src = galImg.src;
-  //     li.appendChild(btn);
-  //     li.appendChild(img);
-  //     addGalleryImg.before(li);
-
-  //     btn.addEventListener('click', () => {
-  //       galleryUl.removeChild(li);
-  //     });
-  //   }
-  // });
-}
+const gal = document.querySelector('.anncPreview');
 
 function loadAnnouncements(data){
   const { announcements, mainImages, galImages } = data;
-  const gal = document.querySelector('.anncPreview');
+  gal.innerHTML = '';
 
   for(const annc of announcements){
     const { AnnouncementID, Title, Description, DatePosted } = annc;
@@ -212,10 +182,10 @@ function loadAnnouncements(data){
       `${setDate.toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
-        year: 'numeric'
+        year: 'numeric',
       })} ${setDate.toLocaleTimeString('en-US', {
         hour: 'numeric',
-        minute: '2-digit'
+        minute: '2-digit',
       })}`;
     
     txt.classList.add('txt');
@@ -255,7 +225,7 @@ function loadAnnouncements(data){
     for(const img of galImages){
       if(img.AnnouncementID === AnnouncementID){
         const galImg = document.createElement('img');
-  
+
         Object.assign(galImg, {
           src: img.ImagePath,
           loading: 'lazy',
@@ -269,18 +239,19 @@ function loadAnnouncements(data){
     edit.setAttributeNS(null, 'viewBox', '0 0 512 512');
     edit.setAttributeNS(null, 'onclick', 'openModal("anncModal", "Edit")');
     edit.innerHTML = '<path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/>';
-    
     del.setAttributeNS(null, 'viewBox', '0 0 448 512');
     del.innerHTML = '<path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/>';
 
     edit.addEventListener('click', () => {
       const addGalleryImg = galleryUl.querySelector('.addImg');
+      const mainImgName = mainImg.src.split("/");
 
       updateId.value = AnnouncementID;
       ancTitle.value = h2.innerText;
       ancDescription.value = p.innerText;
       mainImagePreview.src = mainImg.src;
       mainImagePreview.style.display = 'block';
+      mainImagePreview.dataset.imgName = mainImgName[mainImgName.length - 1];
       mainLabel.classList.add('hasImg');
       mainImgP.style.display = 'none';
 
@@ -291,7 +262,12 @@ function loadAnnouncements(data){
         
         galBtn.type = 'button';
         galBtn.innerHTML = `<img src="../images/svg/xmark.svg" loading="lazy" alt="xmark">`
+        img.classList.add('galImg');
         img.src = galImg.src;
+
+        const galImgName = img.src.split("/");
+        img.dataset.imgName = galImgName[galImgName.length - 1];
+
         galLi.appendChild(galBtn);
         galLi.appendChild(img);
         addGalleryImg.before(galLi);
@@ -319,41 +295,46 @@ function loadAnnouncements(data){
           .then(response => response.json())
           .then(res2 => {
             if(res2.success){
-              modalPN().alert({
-                title: 'Success!',
-                text: 'Announcement deleted',
-                icon: 'check',
-                location: 'center',
-              });
+              gal.removeChild(li);
             }
-
-            gal.removeChild(li);
           });
         }
       });
     });
   }
 }
-async function getAnncData(){
-  try{
-    const response = await fetch('/admin/ancGet');
-    const data = await response.json();
-    return data;
-  }
-  catch(error){
-    console.error('Error fetching data:', error);
-  }
-}
+// async function getAnncData(){
+//   try{
+//     const response = await fetch('/admin/ancGet');
+//     const data = await response.json();
+//     return data;
+//   }
+//   catch(error){
+//     console.error('Error fetching data:', error);
+//   }
+// }
+// window.onload = () => {
+//   getAnncData()
+//   .then(data => {
+//     loadAnnouncements(data);
+//   })
+//   .catch(error => {
+//     console.error("Error loading data:", error);
+//   });
+// };
 
-window.onload = () => {
-  getAnncData()
+function getAnnouncements(){
+  fetch('/admin/ancGet')
+  .then(response => response.json())
   .then(data => {
     loadAnnouncements(data);
   })
   .catch(error => {
     console.error("Error loading data:", error);
   });
-};
+}
+
+window.onload = getAnnouncements;
 
 function openModal(className, type){
   

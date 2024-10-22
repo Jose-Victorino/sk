@@ -192,7 +192,7 @@ main article .addAnnc{
   gap: 10px;
 }
 .anncPreview .icon svg{
-  height: var(--fs-16-20);
+  height: var(--fs-14-16);
   cursor: pointer;
 }
 .anncPreview .ancGallery{
