@@ -9,18 +9,15 @@ class imageViewer{
     this.article = document.createElement('article');
     this.selectedImg = document.createElement('img');
     this.ul = document.createElement('ul');
+    this.imgs = this.images.length;
     this.data = {
 
     };
 
     document.body.appendChild(this.article);
     this.article.appendChild(this.selectedImg);
-
-    const img = list.querySelectorAll('[data-main-img]');
     
-    this.imgs = img.length;
-    
-    if(img.length > 1){
+    if(this.images.length > 1){
       const nextArrow = document.createElement('div');
       nextArrow.innerHTML = `<svg class="nextArrow" xmlns="http://www.w3.org/2000/svg" fill="hsl(0, 0%, 90%)" viewBox="0 0 320 512"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg>`;
       this.article.appendChild(nextArrow);

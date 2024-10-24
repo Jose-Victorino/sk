@@ -68,6 +68,10 @@ CREATE TABLE IF NOT EXISTS `council members` (
 --INSERT INTO comments (AnnouncementID, Text, CommentDate) VALUES(, "", "");
 --DELETE FROM comments WHERE AnnouncementID = ;
 
+INSERT INTO `council members` (FirstName, MiddleInitial, LastName, Position, Image) VALUES("Jose Lorenzo", "Lepasana", "Victorino ", "P.R.O.", "../images/Picture.png");
+--UPDATE `council members` SET FirstName = , MiddleInitial = , LastName = , Position = , Image =  WHERE CouncilID = ;
+--DELETE FROM `council members` WHERE AnnouncementID = ;
+
 SELECT * FROM `main image`;
 SELECT * FROM `gallery images` WHERE ImagePath NOT NULL ORDER BY Pos ASC;
 SELECT * FROM comments;
@@ -83,7 +87,3 @@ DROP TABLE announcement;
 DROP TABLE admin;
 DROP TABLE `council members`;
 */
-
-INSERT INTO `council members` (FirstName, MiddelInitial, LastName, Position, Image)
-VALUES(1);
-

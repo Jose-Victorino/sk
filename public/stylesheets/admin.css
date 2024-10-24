@@ -1,18 +1,13 @@
 :root{
   --baseWidth: 200px;
 }
-body{
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: clamp(150px, 1.875rem + 21.4286vw, 180px) 1fr;
-}
 
 nav[data-nav] .navlinks [data-nav-tabs].selected{
   font-weight: bold;
 }
 
 main{
-  overflow: hidden auto;
+  margin-left: 48px;
 }
 main article{
   display: none;
@@ -172,7 +167,7 @@ main article .addAnnc{
   gap: 15px;
 }
 .anncPreview .mainImg{
-  height: 220px;
+  height: 200px;
 }
 .anncPreview .txt{
   display: flex;
@@ -205,8 +200,48 @@ main article .addAnnc{
   gap: 5px;
 }
 .anncPreview .ancGallery img{
-  height: 130px;
+  height: 100px;
 }
+.councilPreview{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+.councilPreview li{
+  /* background: var(--l-gray-1); */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.councilPreview img{
+  width: 100%;
+}
+.councilPreview .txt{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+}
+.councilPreview p{
+  font-weight: 600;
+  color: var(--black);
+}
+.councilPreview .icon{
+  background: var(--l-gray-2);
+  position: absolute;
+  padding: 10px 12px;
+  top: 0px;
+  right: 0px;
+  display: flex;
+  gap: 10px;
+}
+.councilPreview .icon svg{
+  height: var(--fs-14-16);
+  cursor: pointer;
+}
+/* .councilPreview span{
+  color: var(--gray);
+} */
 
 .course-modal.show,
 .course-modal article.show{ display: flex; }
@@ -250,10 +285,10 @@ main article .addAnnc{
 }
 @media(max-width: 940px){
   .anncPreview .mainImg{
-    height: 200px;
+    height: 180px;
   }
   .anncPreview .ancGallery img{
-    height: 100px;
+    height: 90px;
   }
 }
 @media(max-width: 780px){
@@ -263,7 +298,7 @@ main article .addAnnc{
   }
   .anncPreview .mainImg{
     width: fit-content;
-    height: 170px;
+    height: 160px;
     margin-inline: auto;
   }
   .anncPreview .ancGallery img{

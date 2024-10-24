@@ -1,254 +1,40 @@
 nav{
-  --mainBackground: hsl(0, 0%, 90%);
-  --topNavBackground: ;
-  --botNavBackground: hsl(0, 0%, 94%);
-  --topNavHeight: ;
-  --botNavHeight: 58px;
   --NavTextColor: hsl(0, 0%, 20%);
-  --NavFontSize: var(--fs-12-14, 14px);
-  --subNavBorder: 1px solid hsl(0, 0%, 80%);
-  --navContWidth: var(--cont-width, 1200px);
 
-  background: var(--mainBackground);
+  background: hsl(0, 0%, 90%);
   color: var(--NavTextColor);
-  position: sticky;
+  position: fixed;
   z-index: 10;
   top: 0;
-}
-
-nav[data-nav="sidebar"]{
   height: 100vh;
 }
-nav[data-nav] .logo{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-nav[data-nav] .logo img{
-  height: 40px;
-  width: 40px;
-}
-nav[data-nav="sidebar"] .logo{
-  padding: 15px;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks .hasSubNav{
-  display: grid;
-  grid-template-rows: max-content 0fr;
-  position: relative;
-  transition: grid-template-rows 0.3s;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks .hasSubNav.show{
-  grid-template-rows: max-content 1fr;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks .hasSubNav a{
-  display: flex;
-  justify-content: space-between;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks .hasSubNav li > :where(a, div){
-  padding-left: 8px;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks img{
-  width: 14px;
-  transition: transform 0.3s;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) ul > li div{
-  gap: 5px;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks .hasSubNav.show > div > img{
-  transform: rotate(180deg);
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks .hasSubNav div + ul{
-  overflow: hidden;
-}
-nav[data-nav="sidebar"] :where(.desktopNav, .mobileNav) .navLinks li .subNav{
-  margin-left: 10px;
-  border-left: var(--subNavBorder);
-}
 
-nav[data-nav] ul a{
-  display: flex;
-  align-items: center;
+nav .navLinks{
+  width: max-content;
+}
+nav .navLinks a{
   text-decoration: none;
   text-transform: uppercase;
-  cursor: pointer;
   color: var(--NavTextColor);
-  font-size: var(--NavFontSize);
+  display: grid;
+  grid-template-columns: max-content 0fr;
+  gap: 0px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: grid-template-columns 0.3s, gap 0.3s;
 }
-nav[data-nav] :where(.desktopNav, .mobileNav) :where(.navLinks, .subNav) > li > :where(a, div){
-  display: flex;
-  padding: 10px 15px;
-  text-wrap: nowrap;
+nav .navLinks a img{
+  width: 18px;
 }
-
-nav[data-nav="header"] article{
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  box-shadow: 0 0 8px hsl(0, 0%, 53%);
-}
-nav[data-nav="header"] ul{
-  list-style: none;
-}
-nav[data-nav="header"] .bottom{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: var(--botNavHeight);
-  width: var(--navContWidth);
-}
-nav[data-nav="header"] article section > div{
+nav .navLinks a p{
+  font-size: var(--fs-12-14);
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  height: inherit;
+  max-width: max-content;
+  overflow: hidden;
 }
-
-nav[data-nav="header"] :where(.desktopNav, .mobileNav) ul > li div{
-  justify-content: space-between;
-}
-
-@media(min-width: 561px){
-  nav[data-nav] .mobileNav{
-    display: none;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks{
-    display: flex;
-    gap: 8px;
-    height: inherit;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks > li{
-    display: flex;
-    position: relative;
-    align-items: center;
-    height: inherit;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks > li > div{
-    display: flex;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks img{
-    width: 14px;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks > li > :where(a, div){
-    position: relative;
-    overflow-y: hidden;
-    height: inherit;
-    padding: 0 12px;
-  }
-  /* HOVERRRRR */
-  /* nav[data-nav="header"] .desktopNav .navLinks > li > :where(a, div)::after{
-    content: '';
-    background: hsl(0, 0%, 53%);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 3px;
-    width: 100%;
-    border-radius: 3px 3px 0 0;
-    transform: translateY(110%);
-    transition: transform 0.3s;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks > li:hover > :where(a, div)::after{
-    transform: translateY(0%);
-  } */
-  nav[data-nav="header"] .desktopNav .hasSubNav{
-    position: relative;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks .subNav{
-    background: var(--botNavBackground);
-    position: absolute;
-    display: none;
-    flex-direction: column;
-    min-width: 100px;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks li:hover > ul{
-    display: flex;
-  }
-  nav[data-nav="header"] .desktopNav .navLinks > .hasSubNav > .subNav{
-    bottom: 0;
-    transform: translateY(100%);
-  }
-  nav[data-nav="header"] .desktopNav .subNav > .hasSubNav > .subNav{
-    top: 0;
-    right: 0;
-    transform: translateX(100%);
-  }
-  nav[data-nav="header"] .desktopNav .subNav > li:not(:last-child){
-    border-bottom: var(--subNavBorder);
-  }
-}
-@media(max-width: 560px){
-  nav[data-nav="header"] .Burger-Cont .Nav-Burger{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 20px;
-    aspect-ratio: 7 / 8;
-    cursor: pointer;
-    transition: 0.3s;
-    user-select: none;
-  }
-  nav[data-nav="header"] .Burger-Cont .Nav-Burger .Bar{
-    background: var(--NavTextColor);
-    height: 12%;
-    border-radius: 100px;
-    transition: 0.3s;
-  }
-  nav[data-nav="header"] .Burger-Cont .Nav-Burger.on{ transform: rotateZ(180deg); }
-  nav[data-nav="header"] .Burger-Cont .Nav-Burger.on .Bar-Top{ transform: rotateZ(45deg) translate(26%, 200%); }
-  nav[data-nav="header"] .Burger-Cont .Nav-Burger.on .Bar-Bot{ transform: rotateZ(-45deg) translate(26%, -200%); }
-  nav[data-nav="header"] .Burger-Cont .Nav-Burger.on .Bar-Mid{ opacity: 0; }
-
-  nav[data-nav] .desktopNav{
-    display: none;
-  }
-  nav[data-nav="header"] .mobileNav{
-    position: relative;
-  }
-  nav[data-nav="header"] .mobileNav .bottom{
-    width: calc(100% - 30px);
-  }
-
-  nav[data-nav="header"] .mobileNav .navLinks{
-    background: var(--mainBackground);
-    position: absolute;
-    top: var(--botNavHeight);
-    left: 0;
-    min-height: calc(100vh - var(--botNavHeight));
-    min-width: 150px;
-    transform: translateX(-100%);
-    transition: transform 0.3s;
-  }
-  nav[data-nav="header"] .mobileNav .navLinks.show{
-    transform: translateX(0%);
-  }
-  nav[data-nav="header"] .mobileNav .navLinks .hasSubNav{
-    display: grid;
-    grid-template-rows: max-content 0fr;
-    position: relative;
-    transition: grid-template-rows 0.3s;
-  }
-  nav[data-nav="header"] .mobileNav .navLinks .hasSubNav a{
-    display: flex;
-    justify-content: space-between;
-  }
-  nav[data-nav="header"] .mobileNav .navLinks .hasSubNav li > :where(a, div){
-    padding-left: 8px;
-  }
-  nav[data-nav="header"] .mobileNav .navLinks img{
-    width: 14px;
-    transition: transform 0.3s;
-  }
-  nav[data-nav="header"] .mobileNav .navLinks .hasSubNav.show{
-    grid-template-rows: max-content 1fr;
-  }
-  nav[data-nav="header"] .mobileNav .navLinks .hasSubNav.show > div > img{
-    transform: rotate(180deg);
-  }
-  nav[data-nav="header"] .mobileNav .navLinks .hasSubNav div + ul{
-    overflow: hidden;
-  }
-  nav[data-nav="header"] .mobileNav .navLinks li .subNav{
-    margin-left: 10px;
-    border-left: var(--subNavBorder);
-  }
+nav:hover .navLinks a{
+  gap: 8px;
+  grid-template-columns: max-content 1fr;
 }
