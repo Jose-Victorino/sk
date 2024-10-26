@@ -89,12 +89,12 @@ anncForm.addEventListener('submit', (e) => {
   const data = {
     title: anncTitle.value,
     description: anncDesc.value,
-    mainImg: `../images/${mImg}`,
+    mainImg: `../images/announcements/${mImg}`,
     galleryImgs: [],
   };
 
   for(const img of galleryImgs){
-    data.galleryImgs.push(`../images/${img.dataset.imgName}`);
+    data.galleryImgs.push(`../images/announcements/${img.dataset.imgName}`);
   }
   
   if(formType === 'Add'){
@@ -162,7 +162,7 @@ function imageChange(inputElement, imageElement, labelElement, paragraphElement,
     }
   });
 }
-imageChange(anncMainImg, mainImg, anncLabel, anncP, '../images/');
+imageChange(anncMainImg, mainImg, anncLabel, anncP, '../images/announcements/');
 imageChange(conlMemberImg, memberImg, memberLabel, conlP, '../images/council members/');
 
 function clearConlForm(){
