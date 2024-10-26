@@ -27,15 +27,16 @@ main article .addAnnc{
   border: solid 1px var(--l-gray-2);
   width: fit-content;
 }
-#announcementForm > *:not(:last-child){
+
+form > *:not(:last-child){
   margin-bottom: 20px;
 }
-#announcementForm .top{
+form .top{
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-#announcementForm .top > div{
+form .top > div{
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -58,12 +59,14 @@ main article .addAnnc{
 #announcementForm .top input[type="date"]{
   width: fit-content;
 }
-#announcementForm label[for="ancMainImg"]{
+#announcementForm label[for="ancMainImg"],
+#councilForm label[for="memberImg"]{
   align-self: center;
   height: var(--baseWidth);
   width: var(--baseWidth);
 }
-#announcementForm .mainImgCont{
+#announcementForm .mainImgCont,
+#councilForm .memberImgCont{
   background: hsl(0, 0%, 90%);
   display: flex;
   align-items: center;
@@ -73,21 +76,22 @@ main article .addAnnc{
   width: var(--baseWidth);
   cursor: pointer;
 }
-#announcementForm .mainImgCont p{
-  font-size: var(--fs-12-14);
-}
 #announcementForm label[for="ancMainImg"].hasImg,
-#announcementForm label[for="ancMainImg"].hasImg .mainImgCont{
+#announcementForm label[for="ancMainImg"].hasImg .mainImgCont,
+#councilForm label[for="memberImg"].hasImg,
+#councilForm label[for="memberImg"].hasImg .memberImgCont{
   width: fit-content;
 }
-#announcementForm .mainImgCont p{
+#announcementForm .mainImgCont p,
+#councilForm .memberImgCont p{
   position: absolute;
   bottom: 50%;
   right: 50%;
+  font-size: var(--fs-12-14);
   transform: translate(50%, 50%);
 }
-#announcementForm .imagePreview{
-  /* object-fit: contain; */
+#announcementForm .imagePreview,
+#councilForm .imagePreview{
   height: var(--baseWidth);
 }
 #announcementForm .titleCont{
@@ -133,22 +137,37 @@ main article .addAnnc{
   width: 100%;
   cursor: pointer;
 }
-#announcementForm .bottom{
+form .bottom{
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
-#announcementForm .errorMsg{
+form .bottom .errorMsg{
   opacity: 0;
   color: rgb(235, 16, 16);
 }
-#announcementForm .bottom button{
+form .bottom button{
   background: var(--white);
+  font-size: var(--fs-12-14);
   padding: 8px 14px;
   border: solid 1px var(--l-gray-2);
   width: fit-content;
 }
+#councilForm .top .inputs{
+  max-width: 540px;
+  margin-inline: auto;
+  gap: 10px;
+}
+#councilForm .top .inputs div{
+  display: flex;
+  gap: 10px;
+}
+#councilForm .top .inputs input{
+  width: 100%;
+}
+
+
 .anncPreview{
   display: flex;
   flex-direction: column;
@@ -202,6 +221,7 @@ main article .addAnnc{
 .anncPreview .ancGallery img{
   height: 100px;
 }
+
 .councilPreview{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -265,15 +285,15 @@ main article .addAnnc{
   padding: 20px;
   box-shadow: 0 0 90px hsla(0, 0%, 0%, 0.35);
 }
+.course-modal article h1{
+  margin-bottom: 12px;
+}
 .course-modal .closeBtn{
   position: absolute;
   top: 10px;
   right: 30px;
   width: 20px;
   color: var(--white-1);
-}
-.course-modal .anncModal h1{
-  margin-bottom: 12px;
 }
 
 /* --==Responsive==-- */
@@ -308,5 +328,9 @@ main article .addAnnc{
 @media(max-width: 560px){
   #announcementForm .mid .galleryImages{
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  #councilForm .top .inputs div{
+    flex-direction: column;
   }
 }

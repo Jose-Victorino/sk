@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS announcement (
     AdminID INTEGER NOT NULL,
     Title VARCHAR(255) NOT NULL,
     Description LONGTEXT,
-    DatePosted DATETIME,
+    DatePosted DATETIME NOT NULL,
     PRIMARY KEY (AnnouncementID),
     FOREIGN KEY (AdminID) REFERENCES admin(AdminID)
 );
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS comments (
 CREATE TABLE IF NOT EXISTS `council members` (
     CouncilID INTEGER,
     FirstName VARCHAR(45) NOT NULL,
-    MiddleInitial VARCHAR(45) NOT NULL,
+    MiddleInitial VARCHAR(45),
     LastName VARCHAR(45) NOT NULL,
     Position TEXT CHECK(Position IN ('Chairman', 'SK Treasurer', 'SK Secretary', 'SK Councilor')) NOT NULL,
     Image VARCHAR(255) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `council members` (
 --INSERT INTO comments (AnnouncementID, Text, CommentDate) VALUES(, "", "");
 --DELETE FROM comments WHERE AnnouncementID = ;
 
-INSERT INTO `council members` (FirstName, MiddleInitial, LastName, Position, Image) VALUES("Jose Lorenzo", "Lepasana", "Victorino ", "P.R.O.", "../images/Picture.png");
+--INSERT INTO `council members` (FirstName, MiddleInitial, LastName, Position, Image) VALUES("", "", "", "", "");
 --UPDATE `council members` SET FirstName = , MiddleInitial = , LastName = , Position = , Image =  WHERE CouncilID = ;
 --DELETE FROM `council members` WHERE AnnouncementID = ;
 
@@ -79,11 +79,9 @@ SELECT * FROM announcement;
 SELECT * FROM admin;
 SELECT * FROM `council members`;
 
-/*
 DROP TABLE `main image`;
 DROP TABLE `gallery images`;
 DROP TABLE comments;
 DROP TABLE announcement;
 DROP TABLE admin;
 DROP TABLE `council members`;
-*/

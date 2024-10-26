@@ -82,7 +82,7 @@
           </ul>
         </div>
         <div class="bottom">
-          <span class="errorMsg">*No cover photo selected</span>
+          <span class="errorMsg">*</span>
           <div>
             <button type="reset" onclick="clearAnncForm()">Clear</button>
             <button type="submit">Submit</button>
@@ -104,13 +104,19 @@
               </div>
             </label>
           </div>
-          <input type="text" name="firstName" id="firstName" required>
-          <input type="text" name="middleInitial" id="middleInitial" required>
-          <input type="text" name="lastName" id="lastName" required>
-          <input type="text" name="position" id="position" required>
+          <div class="inputs">
+            <div>
+              <input type="text" name="firstName" id="firstName" placeholder="First Name" required>
+              <input type="text" name="middleInitial" id="middleInitial" placeholder="Middle Initial">
+            </div>
+            <div>
+              <input type="text" name="lastName" id="lastName" placeholder="Last Name" required>
+              <input type="text" name="position" id="position" placeholder="Position" required>
+            </div>
+          </div>
         </div>
         <div class="bottom">
-          <span class="errorMsg">*No cover photo selected</span>
+          <span class="errorMsg">*</span>
           <div>
             <button type="reset" onclick="clearConlForm()">Clear</button>
             <button type="submit">Submit</button>
@@ -129,6 +135,7 @@
       <ul class="anncPreview"></ul>
     </article>
     <article data-nav-windows="Council Members">
+      <button class="addAnnc" onclick="openModal('conlModal', 'Add')">Add Council Member</button>
       <h1>Council Members</h1>
       <ul class="councilPreview"></ul>
     </article>

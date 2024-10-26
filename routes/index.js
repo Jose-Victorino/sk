@@ -53,7 +53,7 @@ const loadData = () => {
 }
 
 // HOME
-router.get('/', function(req, res, next){
+router.get('/', function(req, res){
   loadData()
   .then(([announcements, mainImages, galImages, comments, council]) => {
     res.render('index', {
@@ -70,12 +70,12 @@ router.get('/', function(req, res, next){
   });
 });
 // ADMIN
-router.get('/admin', function(req, res, next){
+router.get('/admin', function(req, res){
   res.render('admin');
 });
 
 // ANNOUNCEMENT
-router.get('/admin/anncGet', function(req, res, next){
+router.get('/admin/anncGet', function(req, res){
   loadData()
   .then(([announcements, mainImages, galImages, comments]) => {
     res.status(200).json({
@@ -92,7 +92,7 @@ router.get('/admin/anncGet', function(req, res, next){
     res.status(500).json({ success: false, message: 'Cannot load data' });
   });
 });
-router.post('/admin/anncAdd', function(req, res, next){
+router.post('/admin/anncAdd', function(req, res){
   const { title, description, mainImg, galleryImgs } = req.body;
 
   con.run('INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(?, ?, ?, ?)', [1, title, description, new Date().toISOString()], function (err){
@@ -121,7 +121,7 @@ router.post('/admin/anncAdd', function(req, res, next){
     res.status(200).json({ success: true, message: 'Records successfully added!' });
   });
 });
-router.post('/admin/anncUpdate', function(req, res, next){
+router.post('/admin/anncUpdate', function(req, res){
   const { id, title, description, mainImg, galleryImgs } = req.body;
 
   con.run('UPDATE announcement SET AdminID = ?, Title = ?, Description = ? WHERE AnnouncementID = ?', [1, title, description, id], (err, row) => {
@@ -147,7 +147,7 @@ router.post('/admin/anncUpdate', function(req, res, next){
 
   res.status(200).json({ success: true, message: 'Records successfully updated!' });
 });
-router.post('/admin/anncDelete', function(req, res, next){
+router.post('/admin/anncDelete', function(req, res){
   var { id } = req.body;
   
   con.run('DELETE FROM `main image` WHERE AnnouncementID = ?', id, (err, row) => {
@@ -179,7 +179,7 @@ router.post('/admin/anncDelete', function(req, res, next){
 });
 
 // COUNCIL MEMBERS
-router.get('/admin/councilGet', function(req, res, next){
+router.get('/admin/councilGet', function(req, res){
   con.all('SELECT * FROM `council members`', function(err, rows){
     if(err){
       console.error('Cannot load council members data');
@@ -189,10 +189,22 @@ router.get('/admin/councilGet', function(req, res, next){
     res.status(200).json({ success: true, message: 'Records successfully loaded!', data: rows });
   });
 });
-router.post('/admin/councilUpdate', function(req, res, next){
-  var { id,  } = req.body;
+router.post('/admin/councilAdd', function(req, res){
+  const { image, firstName, mInitial, lastName, position } = req.body;
 
-  con.run('UPDATE `council members` SET FirstName = ?, MiddleInitial = ?, LastName = ?, Position = ?, Image = ? WHERE AnnouncementID = ?', [ id], (err, row) => {
+  con.run('INSERT INTO `council members` (FirstName, MiddleInitial, LastName, Position, Image) VALUES(?, ?, ?, ?, ?)', [firstName, mInitial, lastName, position, image], (err, row) => {
+    if(err){
+      console.error('Error inserting council member', err);
+      return res.status(500).json({ success: false, message: 'Error inserting council member' });
+    }
+  });
+
+  res.status(200).json({ success: true, message: 'Record successfully inserted!' });
+});
+router.post('/admin/councilUpdate', function(req, res){
+  const { id, image, firstName, mInitial, lastName, position } = req.body;
+
+  con.run('UPDATE `council members` SET FirstName = ?, MiddleInitial = ?, LastName = ?, Position = ?, Image = ? WHERE CouncilID = ?', [firstName, mInitial, lastName, position, image, id], (err, row) => {
     if(err){
       console.error('Error updating council member', err);
       return res.status(500).json({ success: false, message: 'Error updating council member' });
@@ -201,10 +213,10 @@ router.post('/admin/councilUpdate', function(req, res, next){
 
   res.status(200).json({ success: true, message: 'Records successfully updated!' });
 });
-router.post('/admin/councilDelete', function(req, res, next){
+router.post('/admin/councilDelete', function(req, res){
   var { id } = req.body;
 
-  con.run('DELETE FROM `council members` WHERE AnnouncementID = ?', id, (err, row) => {
+  con.run('DELETE FROM `council members` WHERE CouncilID = ?', id, (err, row) => {
     if(err){
       console.error('Error deleting council member', err);
       return res.status(500).json({ success: false, message: 'Error deleting council member' });

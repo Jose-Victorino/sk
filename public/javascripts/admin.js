@@ -29,24 +29,6 @@ const galImg = anncForm.querySelector('.galleryImages');
 const anncError = anncForm.querySelector('.errorMsg');
 let formType;
 
-anncMainImg.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-
-  if(file && file.type.startsWith('image/')){
-    mainImg.src = `../images/${file.name}`;
-    mainImg.style.display = 'block';
-    mainImg.dataset.imgName = file.name;
-    anncLabel.classList.add('hasImg');
-    anncP.style.display = 'none';
-  }
-  else{
-    mainImg.src = '';
-    mainImg.style.display = 'none';
-    mainImg.dataset.imgName = '';
-    anncLabel.classList.remove('hasImg');
-    anncP.style.display = 'block';
-  }
-});
 anncGalImg.addEventListener('change', (e) => {
   const files = e.target.files;
   const addGalleryImg = galImg.querySelector('.addImg');
@@ -89,8 +71,6 @@ function clearAnncForm(){
 anncForm.addEventListener('submit', (e) => {
   e.preventDefault();
   
-  const title = anncTitle.value;
-  const description = anncDesc.value;
   const mImg = mainImg.dataset.imgName;
   const galleryImgs = galImg.querySelectorAll('.galImg');
 
@@ -107,8 +87,8 @@ anncForm.addEventListener('submit', (e) => {
   anncError.style.opacity = '0';
   
   const data = {
-    title,
-    description,
+    title: anncTitle.value,
+    description: anncDesc.value,
     mainImg: `../images/${mImg}`,
     galleryImgs: [],
   };
@@ -153,35 +133,63 @@ anncForm.addEventListener('submit', (e) => {
 
 const conlForm = document.querySelector('#councilForm');
 const conlUpdateId = conlForm.querySelector('[type=hidden]');
-const memberImg = conlForm.querySelector('#memberImg');
+const conlMemberImg = conlForm.querySelector('#memberImg');
 const memberLabel = conlForm.querySelector('label[for="memberImg"]');
+const memberImg = memberLabel.querySelector('.imagePreview');
+const conlP = memberLabel.querySelector('p');
 const conlFName = conlForm.querySelector('#firstName');
 const conlMInitial = conlForm.querySelector('#middleInitial');
 const conlLName = conlForm.querySelector('#lastName');
 const conlPosition = conlForm.querySelector('#position');
+const conlError = conlForm.querySelector('.errorMsg');
+
+function imageChange(inputElement, imageElement, labelElement, paragraphElement, path){
+  inputElement.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+
+    if (file && file.type.startsWith('image/')) {
+      imageElement.src = `${path}${file.name}`;
+      imageElement.style.display = 'block';
+      imageElement.dataset.imgName = file.name;
+      labelElement.classList.add('hasImg');
+      paragraphElement.style.display = 'none';
+    } else {
+      imageElement.src = '';
+      imageElement.style.display = 'none';
+      imageElement.dataset.imgName = '';
+      labelElement.classList.remove('hasImg');
+      paragraphElement.style.display = 'block';
+    }
+  });
+}
+imageChange(anncMainImg, mainImg, anncLabel, anncP, '../images/');
+imageChange(conlMemberImg, memberImg, memberLabel, conlP, '../images/council members/');
 
 function clearConlForm(){
   conlForm.reset();
   memberImg.src = '';
-  // incomplete
+  memberImg.style.display = 'none';
+  memberLabel.classList.remove('hasImg');
+  conlP.style.display = 'block';
 }
 conlForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const image = memberImg.value;
-  const firstName = conlFName.value;
-  const mInitial = conlMInitial.value;
-  const lastName = conlLName.value;
-  const position = conlPosition.value;
- 
-  // error handle
+  const image = memberImg.dataset.imgName;
+
+  if(!image){
+    conlError.innerText = '*No cover photo selected.';
+    conlError.style.opacity = '1';
+    return;
+  }
+  conlError.style.opacity = '0';
 
   const data = {
-    image,
-    firstName,
-    mInitial,
-    lastName,
-    position,
+    image: `../images/council members/${image}`,
+    firstName: conlFName.value,
+    mInitial: conlMInitial.value,
+    lastName: conlLName.value,
+    position: conlPosition.value,
   };
 
   if(formType === 'Add'){
@@ -200,7 +208,7 @@ conlForm.addEventListener('submit', (e) => {
     });
   }
   if(formType === 'Edit'){
-    data.id = anncUpdateId.value;
+    data.id = conlUpdateId.value;
 
     fetch('/admin/councilUpdate', {
       method: 'POST',
@@ -237,7 +245,7 @@ function loadAnnouncements(data){
     const ancGallery = document.createElement('div');
     const txt = document.createElement('div');
     const icon = document.createElement('div');
-    const mainImg = document.createElement('img');
+    const mainImgTag = document.createElement('img');
     const edit = document.createElementNS('http://www.w3.org/2000/svg', "svg");
     const del = document.createElementNS('http://www.w3.org/2000/svg', "svg");
     const setDate = new Date(DatePosted);
@@ -261,7 +269,7 @@ function loadAnnouncements(data){
     li.appendChild(ancMain);
     li.appendChild(ancGallery);
     li.appendChild(icon);
-    ancMain.appendChild(mainImg);
+    ancMain.appendChild(mainImgTag);
     ancMain.appendChild(txt);
     txt.appendChild(h2);
     txt.appendChild(span);
@@ -272,13 +280,13 @@ function loadAnnouncements(data){
 
     for(const img of mainImages){
       if(img.AnnouncementID === AnnouncementID){
-        mainImg.classList.add('mainImg');
-        Object.assign(mainImg, {
+        mainImgTag.classList.add('mainImg');
+        Object.assign(mainImgTag, {
           src: img.ImagePath,
           loading: 'lazy',
           alt: 'main image',
         })
-        mainImg.dataset.mainImg = "";
+        mainImgTag.dataset.mainImg = "";
       }
     }
     
@@ -288,16 +296,16 @@ function loadAnnouncements(data){
     
     for(const img of galImages){
       if(img.AnnouncementID === AnnouncementID){
-        const galImg = document.createElement('img');
+        const galImgTag = document.createElement('img');
 
-        Object.assign(galImg, {
+        Object.assign(galImgTag, {
           src: img.ImagePath,
           loading: 'lazy',
           alt: 'gallery image',
         })
-        galImg.dataset.mainImg = "";
+        galImgTag.dataset.mainImg = "";
 
-        ancGallery.appendChild(galImg);
+        ancGallery.appendChild(galImgTag);
       }
     }
     
@@ -312,18 +320,18 @@ function loadAnnouncements(data){
 
     edit.addEventListener('click', () => {
       const addGalleryImg = galImg.querySelector('.addImg');
-      const mainImgName = mainImg.src.split("/");
+      const mainImgName = mainImgTag.src.split("/");
 
       anncUpdateId.value = AnnouncementID;
       anncTitle.value = h2.innerText;
       anncDesc.value = p.innerText;
-      mainImg.src = mainImg.src;
+      mainImg.src = mainImgTag.src;
       mainImg.style.display = 'block';
       mainImg.dataset.imgName = mainImgName[mainImgName.length - 1];
       anncLabel.classList.add('hasImg');
       anncP.style.display = 'none';
 
-      for(const galImg of ancGallery.children){
+      for(const imgInLi of ancGallery.children){
         const galLi = document.createElement('li');
         const img = document.createElement('img');
         const galBtn = document.createElement('button');
@@ -331,7 +339,7 @@ function loadAnnouncements(data){
         galBtn.type = 'button';
         galBtn.innerHTML = `<img src="../images/svg/xmark.svg" loading="lazy" alt="xmark">`
         img.classList.add('galImg');
-        img.src = galImg.src;
+        img.src = imgInLi.src;
 
         const galImgName = img.src.split("/");
         img.dataset.imgName = galImgName[galImgName.length - 1];
@@ -372,6 +380,8 @@ function loadAnnouncements(data){
   }
 }
 function loadCouncil(data){
+  councilList.innerHTML = '';
+
   for(const member of data.data){
     const { CouncilID, FirstName, MiddleInitial, LastName, Position, Image } = member;
     const li = document.createElement('li');
@@ -382,8 +392,15 @@ function loadCouncil(data){
     const icon = document.createElement('div');
     const edit = document.createElementNS('http://www.w3.org/2000/svg', "svg");
     const del = document.createElementNS('http://www.w3.org/2000/svg', "svg");
-    const fullName = `${FirstName} ${MiddleInitial.split('')[0]}. ${LastName}`;
-  
+    let fullName;
+
+    if(MiddleInitial){
+      fullName = `${FirstName} ${MiddleInitial.split('')[0].toUpperCase()}. ${LastName}`;
+    }
+    else{
+      fullName = `${FirstName} ${LastName}`;
+    }
+
     txt.classList.add('txt');
     icon.classList.add('icon');
   
@@ -406,13 +423,24 @@ function loadCouncil(data){
     });
 
     edit.setAttributeNS(null, 'viewBox', '0 0 512 512');
-    edit.setAttributeNS(null, 'onclick', 'openModal("anncModal", "Edit")');
+    edit.setAttributeNS(null, 'onclick', 'openModal("conlModal", "Edit")');
     edit.innerHTML = '<path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/>';
     del.setAttributeNS(null, 'viewBox', '0 0 448 512');
     del.innerHTML = '<path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/>';
 
     edit.addEventListener('click', () => {
+      const memImgName = memImg.src.split("/");
 
+      conlUpdateId.value = CouncilID;
+      conlFName.value = FirstName;
+      conlMInitial.value = MiddleInitial;
+      conlLName.value = LastName;
+      conlPosition.value = Position;
+      memberImg.src = memImg.src;
+      memberImg.style.display = 'block';
+      memberImg.dataset.imgName = memImgName[memImgName.length - 1];
+      memberLabel.classList.add('hasImg');
+      conlP.style.display = 'none';
     });
     del.addEventListener('click', () =>{
       modalPN().confirm({
@@ -462,8 +490,13 @@ function openModal(className, type){
   const modalH1 = modalList.querySelector(`.${className} > h1`);
 
   modalList.classList.add('show');
-  modalH1.innerText = `${type} Announcement`;
   formType = type;
+  if(className === 'anncModal'){
+    modalH1.innerText = `${type} Announcement`;
+  }
+  if(className === 'conlModal'){
+    modalH1.innerText = `${type} Council Member`;
+  }
   
   for(const tag of modals){
     if(tag.classList.contains(className)){
@@ -478,4 +511,7 @@ function closeModal(){
   for(i = 0; i < modals.length; i++){
     modals[i].classList.remove('show');
   }
+
+  clearAnncForm();
+  clearConlForm();
 }
