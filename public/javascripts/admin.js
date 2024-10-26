@@ -468,23 +468,37 @@ function loadCouncil(data){
     });
   }
 }
-function getData(name){
-  fetch(`/admin/${name}Get`)
-  .then(response => response.json())
+async function getData(name){
+  try{
+    const response = await fetch(`/admin/${name}Get`);
+    const data = await response.json();
+    return data;
+  }
+  catch(error){
+    console.error('Error fetching data:', error);
+  }
+}
+window.onload = () => {
+  getData('annc')
   .then(data => {
     if(data.success){
-      if(name === 'annc') loadAnnouncements(data);
-      if(name === 'council') loadCouncil(data);
+      loadAnnouncements(data);
     }
   })
   .catch(error => {
     console.error("Error loading data:", error);
   });
-}
-window.onload = () => {
-  getData('annc');
-  getData('council');
-}
+  
+  getData('council')
+  .then(data => {
+    if(data.success){
+      loadCouncil(data);
+    }
+  })
+  .catch(error => {
+    console.error("Error loading data:", error);
+  });
+};
 
 function openModal(className, type){
   const modalH1 = modalList.querySelector(`.${className} > h1`);
