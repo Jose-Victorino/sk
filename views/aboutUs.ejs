@@ -21,10 +21,60 @@
     <%- include('templates/navigation') %>
   </nav>
   <main>
+    <header>
+      <img class="bgImg" src="../images/src/aboutUs header.jpg" alt="header bg">
+      <img class="mainImg" src="../images/src/aboutUs header.jpg" alt="AboutUs header">
+    </header>
+    <section>
+      <div class="cont">
+        <div class="mainAbout">
+          <div>
+            <div class="left">
+              <ul class="slideshowAbout">
+                <li>
+                  <img src="../images/src/1.jpg" alt="1">
+                </li>
+                <li>
+                  <img src="../images/src/2.jpg" alt="2">
+                </li>
+                <li>
+                  <img src="../images/src/3.jpg" alt="3">
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="right">
+            <h1>Meet Our Team</h1>
+            <div class="councilMembers">
+              <ul class="councilList">
+                <% council.forEach((member, i) => { %>
+                  <% if(i % 2 === 0){ %>
+                    <li>
+                      <img src="<%= member.Image%>" alt="council member">
+                    </li>
+                  <% } %>
+                <% }); %>
+              </ul>
+              <ul class="councilList">
+                <% council.forEach((member, i) => { %>
+                  <% if(i % 2 === 1){ %>
+                    <li>
+                      <img src="<%= member.Image%>" alt="council member">
+                    </li>
+                  <% } %>
+                <% }); %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <footer>
       <%- include('templates/footer') %>
     </footer>
   </main>
+  <script src="../javascripts/slider.js"></script>
   <script src="../javascripts/script.js"></script>
+  <script src="../javascripts/aboutUs.js"></script>
 </body>
 </html>

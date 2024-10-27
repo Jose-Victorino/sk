@@ -5,8 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config();
 
-var indexRouter = require('./routes/index');
-var adminRouter = require('./routes/admin');
+var indexRouter = require('./routes/rIndex');
+var adminRouter = require('./routes/rAdmin');
 
 var app = express();
 

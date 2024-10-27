@@ -39,15 +39,15 @@ const loadData = () => {
       resolve(rows);
     });
   });
-  const councilMembersQuery = new Promise((resolve, reject) => {
-    con.all('SELECT * FROM `council members`', function(err, rows){
-      if(err){
-        console.error('Cannot load council members data');
-        reject(err);
-      }
-      resolve(rows);
+    const councilMembersQuery = new Promise((resolve, reject) => {
+      con.all('SELECT * FROM `council members`', function(err, rows){
+        if(err){
+          console.error('Cannot load council members data');
+          reject(err);
+        }
+        resolve(rows);
+      });
     });
-  });
 
   return Promise.all([announcementsQuery, mainImagesQuery, galImagesQuery, commentsQuery, councilMembersQuery])
 }
@@ -74,7 +74,18 @@ router.get('/', function(req, res){
 
 // ABOUT US
 router.get('/AboutUs', function(req, res){
-  res.render('aboutUs');
+  loadData()
+  .then(([announcements, mainImages, galImages, comments, council]) => {
+    res.render('aboutUs', {
+      council: council || [],
+    });
+    console.log(council);
+    
+  })
+  .catch((err) => {
+    console.error(`Cannot load data`, err);
+    res.status(500).json({ success: false, message: `Cannot load data` });
+  });
 });
 
 // ANNOUNCEMENTS

@@ -12,16 +12,10 @@ CREATE TABLE IF NOT EXISTS announcement (
     AdminID INTEGER NOT NULL,
     Title VARCHAR(255) NOT NULL,
     Description LONGTEXT,
+    Image VARCHAR(255) NOT NULL,
     DatePosted DATETIME NOT NULL,
     PRIMARY KEY (AnnouncementID),
     FOREIGN KEY (AdminID) REFERENCES admin(AdminID)
-);
-CREATE TABLE IF NOT EXISTS `main image` (
-    ImageID INTEGER,
-    AnnouncementID INTEGER NOT NULL,
-    ImagePath VARCHAR(255) NOT NULL,
-    PRIMARY KEY (ImageID),
-    FOREIGN KEY (AnnouncementID) REFERENCES announcement(AnnouncementID)
 );
 CREATE TABLE IF NOT EXISTS `gallery images` (
     ImageID INTEGER,
@@ -44,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `council members` (
     FirstName VARCHAR(45) NOT NULL,
     MiddleInitial VARCHAR(45),
     LastName VARCHAR(45) NOT NULL,
-    Position TEXT CHECK(Position IN ('Chairman', 'SK Treasurer', 'SK Secretary', 'SK Councilor')) NOT NULL,
+    Position TEXT CHECK(Position IN ('SK Chairman', 'SK Treasurer', 'SK Secretary', 'SK Councilor')) NOT NULL,
     Image VARCHAR(255) NOT NULL,
     PRIMARY KEY (CouncilID)
 );
@@ -54,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `council members` (
 --DELETE FROM admin WHERE AdminID = ;
 
 --INSERT INTO announcement (AdminID, Title, Description, DatePosted) VALUES(, "", "", "");
---UPDATE announcement SET AdminID = , Title = "", Description = ""  WHERE AnnouncementID = ;
+--UPDATE announcement SET AdminID = , Title = "", Description = "" WHERE AnnouncementID = ;
 --DELETE FROM announcement WHERE AnnouncementID = ;
 
 --INSERT INTO `main image` (AnnouncementID, ImagePath) VALUES(, "");
@@ -72,14 +66,12 @@ CREATE TABLE IF NOT EXISTS `council members` (
 --UPDATE `council members` SET FirstName = , MiddleInitial = , LastName = , Position = , Image =  WHERE CouncilID = ;
 --DELETE FROM `council members` WHERE AnnouncementID = ;
 
-SELECT * FROM `main image`;
-SELECT * FROM `gallery images` WHERE ImagePath NOT NULL ORDER BY Pos ASC;
+SELECT * FROM `gallery images`;
 SELECT * FROM comments;
 SELECT * FROM announcement;
 SELECT * FROM admin;
 SELECT * FROM `council members`;
 
-DROP TABLE `main image`;
 DROP TABLE `gallery images`;
 DROP TABLE comments;
 DROP TABLE announcement;

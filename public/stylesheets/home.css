@@ -1,13 +1,7 @@
 body{
   display: flex;
 }
-main{
-  width: 100%;
-  margin-left: 48px;
-}
-main > section{
-  padding: 20px;
-}
+
 header{
   display: flex;
 }
@@ -25,56 +19,7 @@ header img{
 }
 
 
-footer{
-  background: var(--l-gray-1);
 
-}
-footer .cont{
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  height: 400px;
-  padding: 50px 30px;
-}
-footer section{
-  display: grid;
-  grid-template-rows: 120px max-content;
-}
-footer .logo .logoCont{
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-footer .logo img{
-  height: 80px;
-}
-footer .contactList{
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-footer .siteLinks{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-footer .contactList li{
-  display: flex;
-  gap: 8px;
-}
-footer .contactList img{
-  width: 16px;
-  align-self: flex-start;
-}
-footer .contactList div{
-  display: flex;
-  gap: 8px;
-  flex-direction: column;
-  justify-content: center;
-}
-footer a:hover{
-  text-decoration: underline;
-}
 
 #main-annc-list{
   display: grid;

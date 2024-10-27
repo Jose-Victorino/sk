@@ -108,7 +108,15 @@ anncForm.addEventListener('submit', (e) => {
       if(res.success){
         clearAnncForm();
         closeModal();
-        getData('annc');
+        getData('annc')
+        .then(data => {
+          if(data.success){
+            loadAnnouncements(data);
+          }
+        })
+        .catch(error => {
+          console.error("Error loading data:", error);
+        });
       }
     });
   }
@@ -125,7 +133,15 @@ anncForm.addEventListener('submit', (e) => {
       if(res.success){
         clearAnncForm();
         closeModal();
-        getData('annc');
+        getData('annc')
+        .then(data => {
+          if(data.success){
+            loadAnnouncements(data);
+          }
+        })
+        .catch(error => {
+          console.error("Error loading data:", error);
+        });
       }
     });
   }
@@ -203,7 +219,15 @@ conlForm.addEventListener('submit', (e) => {
       if(res.success){
         clearAnncForm();
         closeModal();
-        getData('council');
+        getData('council')
+        .then(data => {
+          if(data.success){
+            loadCouncil(data);
+          }
+        })
+        .catch(error => {
+          console.error("Error loading data:", error);
+        });
       }
     });
   }
@@ -220,7 +244,15 @@ conlForm.addEventListener('submit', (e) => {
       if(res.success){
         clearAnncForm();
         closeModal();
-        getData('council');
+        getData('council')
+        .then(data => {
+          if(data.success){
+            loadCouncil(data);
+          }
+        })
+        .catch(error => {
+          console.error("Error loading data:", error);
+        });
       }
     });
   }
@@ -236,7 +268,7 @@ function loadAnnouncements(data){
   anncList.innerHTML = '';
 
   for(const annc of announcements){
-    const { AnnouncementID, Title, Description, DatePosted } = annc;
+    const { AnnouncementID, Title, Description, Image, DatePosted } = annc;
     const li = document.createElement('li');
     const h2 = document.createElement('h2');
     const span = document.createElement('span');
@@ -261,6 +293,7 @@ function loadAnnouncements(data){
     
     txt.classList.add('txt');
     ancMain.classList.add('ancMain');
+    mainImgTag.classList.add('mainImg');
     ancGallery.classList.add('ancGallery');
     icon.classList.add('icon');
     edit.classList.add('edit');
@@ -278,24 +311,19 @@ function loadAnnouncements(data){
     icon.appendChild(del);
     anncList.appendChild(li);
 
-    for(const img of mainImages){
-      if(img.AnnouncementID === AnnouncementID){
-        mainImgTag.classList.add('mainImg');
-        Object.assign(mainImgTag, {
-          src: img.ImagePath,
-          loading: 'lazy',
-          alt: 'main image',
-        })
-        mainImgTag.dataset.mainImg = "";
-      }
-    }
+    Object.assign(mainImgTag, {
+      src: Image,
+      loading: 'lazy',
+      alt: 'main image',
+    })
+    mainImgTag.dataset.mainImg = "";
     
     h2.innerText = Title;
     span.innerText = formattedDate;
     p.innerText = Description;
     
     for(const img of galImages){
-      if(img.AnnouncementID === AnnouncementID){
+      if(img.AnnouncementID === AnnouncementID && img.ImagePath !== null){
         const galImgTag = document.createElement('img');
 
         Object.assign(galImgTag, {
@@ -380,9 +408,10 @@ function loadAnnouncements(data){
   }
 }
 function loadCouncil(data){
+  const { councilMembers } = data;
   councilList.innerHTML = '';
 
-  for(const member of data.data){
+  for(const member of councilMembers){
     const { CouncilID, FirstName, MiddleInitial, LastName, Position, Image } = member;
     const li = document.createElement('li');
     const memImg = document.createElement('img');
@@ -392,14 +421,6 @@ function loadCouncil(data){
     const icon = document.createElement('div');
     const edit = document.createElementNS('http://www.w3.org/2000/svg', "svg");
     const del = document.createElementNS('http://www.w3.org/2000/svg', "svg");
-    let fullName;
-
-    if(MiddleInitial){
-      fullName = `${FirstName} ${MiddleInitial.split('')[0].toUpperCase()}. ${LastName}`;
-    }
-    else{
-      fullName = `${FirstName} ${LastName}`;
-    }
 
     txt.classList.add('txt');
     icon.classList.add('icon');
@@ -413,7 +434,7 @@ function loadCouncil(data){
     icon.appendChild(del);
     councilList.appendChild(li);
   
-    p.innerText = fullName;
+    p.innerText = `${FirstName} ${MiddleInitial ? (MiddleInitial.toUpperCase() + '.') : ''} ${LastName}`;
     span.innerText = Position;
   
     Object.assign(memImg, {
