@@ -105,11 +105,11 @@ main{
   margin-left: 48px;
 }
 main > section{
+  display: flex;
   padding: 20px;
 }
 footer{
   background: var(--l-gray-1);
-
 }
 footer .cont{
   display: flex;

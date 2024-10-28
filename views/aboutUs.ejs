@@ -47,7 +47,7 @@
             <h1>Meet Our Team</h1>
             <div class="councilMembers">
               <ul class="councilList">
-                <% council.forEach((member, i) => { %>
+                <% councilMembers.forEach((member, i) => { %>
                   <% if(i % 2 === 0){ %>
                     <li>
                       <img src="<%= member.Image%>" alt="council member">
@@ -56,7 +56,7 @@
                 <% }); %>
               </ul>
               <ul class="councilList">
-                <% council.forEach((member, i) => { %>
+                <% councilMembers.forEach((member, i) => { %>
                   <% if(i % 2 === 1){ %>
                     <li>
                       <img src="<%= member.Image%>" alt="council member">

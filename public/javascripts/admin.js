@@ -79,8 +79,8 @@ anncForm.addEventListener('submit', (e) => {
     anncError.style.opacity = '1';
     return;
   }
-  if(galleryImgs.length > 10){
-    anncError.innerText = '*Maximum gallery images is 10.';
+  if(galleryImgs.length > 20){
+    anncError.innerText = '*Maximum gallery images is 20.';
     anncError.style.opacity = '1';
     return;
   }

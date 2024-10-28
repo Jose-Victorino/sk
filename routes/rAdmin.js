@@ -52,7 +52,7 @@ router.post('/anncAdd', function(req, res){
     
     const announcementId = this.lastID;
 
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 20; i++){
       con.run('INSERT INTO `gallery images` (AnnouncementID, Pos, ImagePath) VALUES(?, ?, ?)', [announcementId, i, galleryImgs[i]], (err) => {
         if(err){
           console.error('Error inserting gallery image', err);
@@ -66,13 +66,13 @@ router.post('/anncAdd', function(req, res){
 router.post('/anncUpdate', function(req, res){
   const { id, title, description, mainImg, galleryImgs } = req.body;
 
-  con.run('UPDATE announcement SET AdminID = ?, Title = ?, Description = ? Image = ? WHERE AnnouncementID = ?', [1, title, description, mainImg, id], (err, row) => {
+  con.run('UPDATE announcement SET AdminID = ?, Title = ?, Description = ?, Image = ? WHERE AnnouncementID = ?', [1, title, description, mainImg, id], (err, row) => {
     if(err){
       console.error('Error updating announcement', err);
       return res.status(500).json({ success: false, message: 'Error updating announcement' });
     }
   });
-  for(let i = 0; i < 10; i++){
+  for(let i = 0; i < 20; i++){
     con.run('UPDATE `gallery images` SET ImagePath = ? WHERE Pos = ? AND AnnouncementID = ?', [galleryImgs[i], i, id], (err, row) => {
       if(err){
         console.error('Error updating gallery image', err);
@@ -81,7 +81,7 @@ router.post('/anncUpdate', function(req, res){
     });
   }
   res.status(200).json({ success: true, message: 'Records successfully updated!' });
-}); 
+});
 router.post('/anncDelete', function(req, res){
   const { id } = req.body;
 
