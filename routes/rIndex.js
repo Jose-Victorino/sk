@@ -25,8 +25,6 @@ router.get('/', function(req, res){
   loadData(['announcement', 'gallery images', 'comments', 'council members'])
   .then(([announcements, galImages, comments, councilMembers]) => {
     res.render('home', {
-      success: true,
-      message: 'All data successfully loaded!',
       announcements: announcements || [],
       galImages: galImages || [],
       comments: comments || [],
@@ -41,8 +39,8 @@ router.get('/', function(req, res){
 
 // ABOUT US
 router.get('/AboutUs', function(req, res){
-  loadData(['announcement', 'gallery images', 'comments', 'council members'])
-  .then(([announcements, galImages, comments, councilMembers]) => {
+  loadData(['council members'])
+  .then(([councilMembers]) => {
     res.render('aboutUs', {
       councilMembers: councilMembers || [],
     });

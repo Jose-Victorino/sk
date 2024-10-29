@@ -4,7 +4,7 @@
   --font-2: '';
 
   /* Sizes */
-  --cont-width: 1350px;
+  --cont-width: 1250px;
 
   /* Font Size Clamp (560-700)*/
   --fs-30-36: clamp(30px, 0.375rem + 4.2857vw, 36px);
@@ -101,7 +101,7 @@ input:focus, textarea:focus{ border: 1px solid hsl(0, 0%, 65%); }
 
 
 main{
-  /* width: 100%; */
+  width: calc(100% - 48px);
   margin-left: 48px;
 }
 main > section{

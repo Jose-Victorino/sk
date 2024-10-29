@@ -65,7 +65,7 @@ class slider{
         selectedColor: data.pagination.selectedColor || 'hsl(0, 0%, 95%)',
       }
     }
-
+    
     this.validation();
 
     this.parent.parentNode.insertBefore(this.listWrapper, parent);
@@ -150,10 +150,18 @@ class slider{
     const {type, spanWidth, arrows, draggable, cardAspectRatio, perPage, perMove, scrollable, interval, pagination, gap, breakpoints} = data;
     
     for(const card of cards){
+      const img = card.querySelector('img');
+
       Object.assign(card.style, {
         minWidth: `calc((100% - ${gap * (perPage - 1)}px) / ${perPage})`,
         aspectRatio: cardAspectRatio,
       });
+      Object.assign(img.style, {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
+        userSelect: 'none',
+      })
     }
     switch(type){
       case 'loop':
@@ -661,4 +669,3 @@ class slider{
     }, 1);
   }
 }
-

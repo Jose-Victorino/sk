@@ -24,22 +24,49 @@
     <header>
       <img src="../images/src/header.jpg" alt="header image">
     </header>
+    <section id="anncLatest">
+      <div class="cont">
+        <h1>Latest Announcements</h1>
+        <div>
+          <%
+          const { Title, Description, Image, DatePosted } = announcements[0];
+          const setDate = new Date(DatePosted);
+          const formattedDate = `${setDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} ${setDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+          %>
+          <div class="big">
+            <img src="<%= Image %>" loading="lazy" alt="main image">
+            <h2><%= Title %></h2>
+            <p><%= formattedDate %></p>
+          </div>
+          <ul>
+            <% for(let i = 1; i < 4; i++){ %>
+              <%
+              const { Title, Description, Image, DatePosted } = announcements[i];
+              const setDate = new Date(DatePosted);
+              const formattedDate = `${setDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} ${setDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+              %>
+              <% if(i !== 0){ %>
+                <li>
+                  <img src="<%= Image %>" loading="lazy" alt="main image">
+                  <h2><%= Title %></h2>
+                  <p><%= formattedDate %></p>
+                </li>
+              <% } %>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    </section>
     <section id="homeAbout">
       <div class="cont">
         <p>About Us</p>
       </div>
     </section>
-    <!-- <ul id="main-annc-list">
-      <li>
-        <img src="../images/Screenshot 2024-01-27 033509.png" loading="lazy" alt="main image" data-annc-main-img>
-        <h2 data-annc-title>Lorem, ipsum dolor.</h2>
-        <p data-annc-date-posted>October 16, 2024</p>
-      </li>
-    </ul> -->
     <footer>
       <%- include('templates/footer') %>
     </footer>
   </main>
+  <script src="../javascripts/slider.js"></script>
   <script src="../javascripts/script.js"></script>
 </body>
 </html>
