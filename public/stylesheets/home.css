@@ -17,20 +17,16 @@ header img{
   margin-bottom: 10px;
 }
 #anncLatest .cont > div{
-  display: flex;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: 1fr 265px;
+  width: 100%;
+  gap: 20px;
 }
-
-#anncLatest .big{
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-}
+/* 240px 180px */
 #anncLatest ul{
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 20%;
 }
 #anncLatest :where(li, .big){
   display: flex;
@@ -56,22 +52,27 @@ header img{
 
 /* --==Responsive==-- */
 @media(max-width: 1400px){
+  #anncLatest .cont > div{
+    grid-template-columns: 1fr 240px;
+  }
 
 }
 @media(max-width: 1250px){
   #anncLatest .cont > div{
-    flex-direction: column;
-  }
-  #anncLatest ul{
-    flex-direction: row;
-    width: 100%;
-  }
-  #anncLatest .big{
-    width: 100%;
+    grid-template-columns: 1fr 180px;
   }
 
 }
 @media(max-width: 940px){
+  #anncLatest .cont > div{
+    display: flex;
+    flex-direction: column;
+  }
+  #anncLatest ul{
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
+    overflow-y: hidden;
+  }
   
 }
 @media(max-width: 780px){

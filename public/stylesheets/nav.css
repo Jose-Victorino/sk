@@ -1,3 +1,6 @@
+:root{
+  --navWidth: 48px;
+}
 nav{
   --NavTextColor: hsl(0, 0%, 20%);
 
@@ -37,4 +40,34 @@ nav .navLinks a p{
 nav:hover .navLinks a{
   gap: 8px;
   grid-template-columns: max-content 1fr;
+}
+
+main{
+  width: calc(100% - var(--navWidth));
+  margin-left: var(--navWidth);
+}
+
+/* --==Responsive==-- */
+@media(max-width: 1400px){
+  
+}
+@media(max-width: 1250px){
+  
+}
+@media(max-width: 940px){
+  
+}
+@media(max-width: 780px){
+  
+}
+@media(max-width: 560px){
+  :root{
+    --navWidth: 36px;
+  }
+  nav .navLinks a{
+    padding: 12px 10px;
+  }
+  nav .navLinks a img {
+    width: 16px;
+  }
 }
