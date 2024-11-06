@@ -1,0 +1,43 @@
+form{
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px hsla(0, 0%, 0%, 0.2);
+}
+form .header{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+form span{
+  color: var(--d-gray-1);
+}
+form .top{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+form .top > div{
+  display: flex;
+  gap: 10px;
+}
+form input{
+  width: 100%;
+}
+form .bottom{
+  display: flex;
+  justify-content: center;
+}
+form .bottom button{
+  background: var(--l-gray-1);
+  padding: 8px 14px;
+  border: solid 1px var(--l-gray-2);
+  width: fit-content;
+}
+iframe{
+  width: 100%;
+  aspect-ratio: 5 / 2;
+}

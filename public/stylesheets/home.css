@@ -4,6 +4,18 @@ header{
 header img{
   width: 100%;
 }
+
+#slogan{
+  background: var(--l-gray-1);
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+#slogan h1{
+  font-family: 'Libre';
+  font-size: var(--fs-30-36);
+}
+
 #homeAbout{
   background: var(--l-gray-2);
 }
@@ -13,6 +25,7 @@ header img{
   align-items: center;
   height: 600px;
 }
+
 #anncLatest h1{
   margin-bottom: 10px;
 }
@@ -22,7 +35,6 @@ header img{
   width: 100%;
   gap: 20px;
 }
-/* 240px 180px */
 #anncLatest ul{
   display: flex;
   flex-direction: column;
@@ -64,6 +76,10 @@ header img{
 
 }
 @media(max-width: 940px){
+  #slogan{
+    padding: 20px 0;
+  }
+
   #anncLatest .cont > div{
     display: flex;
     flex-direction: column;
@@ -80,5 +96,8 @@ header img{
 
 }
 @media(max-width: 560px){
-  
+  #slogan h1{
+    font-size: 26px;
+  }
+
 }

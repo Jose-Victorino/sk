@@ -53,7 +53,23 @@ router.get('/AboutUs', function(req, res){
 
 // ANNOUNCEMENTS
 router.get('/Announcement', function(req, res){
-  res.render('announcement');
+  loadData(['announcement', 'gallery images', 'comments'])
+  .then(([announcements, galImages, comments]) => {
+    res.render('announcement', {
+      announcements: announcements || [],
+      galImages: galImages || [],
+      comments: comments || [],
+    });
+  })
+  .catch(err => {
+    console.error('Cannot load data', err);
+    res.status(500).json({ success: false, message: 'Cannot load data' });
+  });
+});
+router.get('/Announcement/view/:id', function(req, res){
+  const { id } = req.params.id;
+
+  
 });
 
 // CONTACTS

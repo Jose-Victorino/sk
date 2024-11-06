@@ -41,6 +41,9 @@ body{
   
 }
 h1, h2, h3, h4, h5, h6, p, b, a, span{ line-height: 100%; }
+h1{
+  font-size: var(--fs-20-24);
+}
 a{
   text-decoration: none;
   color: var(--font-dark);
@@ -102,17 +105,16 @@ input:focus, textarea:focus{ border: 1px solid hsl(0, 0%, 65%); }
 
 main > section{
   display: flex;
-  padding: 20px 0;
+  padding: 50px 0;
 }
 footer{
   background: var(--l-gray-1);
 }
 footer .cont{
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  height: 400px;
-  padding: 50px 30px;
+  padding: 50px 0;
 }
 footer section{
   display: grid;
@@ -131,7 +133,11 @@ footer .contactList{
   flex-direction: column;
   gap: 15px;
 }
+footer h1:has(~ .siteLinks){
+  text-align: center;
+}
 footer .siteLinks{
+  text-align: center;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -172,9 +178,21 @@ footer a:hover{
   :root{
     --cont-width: 720px;
   }
-  
   textarea{
     height: calc(6lh + 2 * (var(--padding) + 2px));
+  }
+  
+  footer section{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  footer .cont{
+    grid-template-columns: repeat(2, 1fr);
+  }
+  footer .logo{
+    grid-column: 1 / span 2;
+    place-items: center;
   }
 }
 @media(max-width: 780px){
@@ -185,6 +203,19 @@ footer a:hover{
     padding: 15px;
   }
 
+  footer section{
+    gap: 10px;
+  }
+  footer h1{
+    text-align: center;
+  }
+  footer .cont{
+    grid-template-columns: 1fr;
+  }
+  footer .logo{
+    grid-column: 1 / span 1;
+    place-content: center;
+  }
 }
 @media(max-width: 560px){
   :root{

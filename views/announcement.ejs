@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SK Bulakan | Announcements</title>
+  <title>SK Bulakan | About Us</title>
   <link rel="shortcut icon" href="" type="png">
   <link rel="stylesheet" href="../stylesheets/reset.css">
   <link rel="stylesheet" href="../stylesheets/nav.css">
@@ -21,6 +21,38 @@
     <%- include('templates/navigation') %>
   </nav>
   <main>
+    <header>
+      
+    </header>
+    <section class="announcement">
+      <div class="cont">
+        <ul class="anncList">
+          <% announcements.forEach(annc => { %>
+            <%
+            const { AnnouncementID, Title, Description, Image, DatePosted } = annc;
+            const setDate = new Date(DatePosted);
+            const formattedDate = `${setDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} ${setDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+            %>
+            <li>
+              <input type="hidden" value="<%= AnnouncementID %>">
+              <img src="<%= Image %>" loading="lazy" alt="main image">
+              <div class="content">
+                <div class="top">
+                  <h2><%= Title %></h2>
+                  <p><%= formattedDate %></p>
+                </div>
+                <div class="bottom">
+                  <a href="">
+                    <img src="../images/svg/message.svg" alt="message">
+                    <span>0</span>
+                  </a>
+                </div>
+              </div>
+            </li>
+          <% }); %>
+        </ul>
+      </div>
+    </section>
     <footer>
       <%- include('templates/footer') %>
     </footer>

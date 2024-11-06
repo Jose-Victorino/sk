@@ -18,20 +18,9 @@
 </head>
 <body>
   <nav>
-    <!-- <div class="left">
-      <div class="logo">
-        <h1>AudioX</h1>
-      </div>
-    </div> -->
     <ul class="navLinks">
       <li>
-        <a data-nav-tabs="Overview">
-          <img src="" alt="">
-          <p>Overview</p>
-        </a>
-      </li>
-      <li>
-        <a data-nav-tabs="Announcements">
+        <a data-nav-tabs="Announcements" class="selected">
           <img src="../images/svg/megaphone.svg" alt="anncSVG" title="announcements">
           <p>Announcements</p>
         </a>
@@ -127,9 +116,7 @@
     <article></article>
   </div>
   <main>
-    <article data-nav-windows="Overview">
-    </article>
-    <article data-nav-windows="Announcements">
+    <article data-nav-windows="Announcements" class="show">
       <button class="addAnnc" onclick="openModal('anncModal', 'Add')">Post new Announcement</button>
       <h1>Posted Announcements</h1>
       <ul class="anncPreview"></ul>

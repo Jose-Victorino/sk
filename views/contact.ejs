@@ -21,6 +21,33 @@
     <%- include('templates/navigation') %>
   </nav>
   <main>
+    <section>
+      <div class="cont">
+        <form>
+          <div class="header">
+            <h1>Email Inquiry</h1>
+            <span>Send us a message via the contact form</span>
+          </div>
+          <div class="top">
+            <div>
+              <input type="text" name="firstName" placeholder="First Name" required>
+              <input type="text" name="lastName" placeholder="Last Name" required>
+            </div>
+            <input type="text" name="subject" placeholder="Subject" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="body" placeholder="Message" required></textarea>
+          </div>
+          <div class="bottom">
+            <button type="submit">Submit</button>
+          </div>
+        </form> 
+      </div>
+    </section>
+    <section>
+      <div class="cont">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d21824.700850086956!2d120.84716889346016!3d14.763480760138032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33964d1b1424350b%3A0x27f4270c3665d751!2sBambang%2C%20Bulakan%2C%20Bulacan!5e0!3m2!1sen!2sph!4v1729259571602!5m2!1sen!2sph" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
     <footer>
       <%- include('templates/footer') %>
     </footer>
