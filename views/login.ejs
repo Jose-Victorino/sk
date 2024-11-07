@@ -37,37 +37,29 @@
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const username = form.querySelector('#username');
-      const password = form.querySelector('#password');
+      const username = form.querySelector('#username').value;
+      const password = form.querySelector('#password').value;
       
-      fetch('/admin/login')
+      fetch('/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
       .then(response => response.json())
       .then(res => {
+        
         if(res.success){
-          let match = false;
-
-          for(const admin of res.data){
-            const { Username, Password } = admin;
-
-            if(username.value === Username && password.value === Password){
-              match = true;
-              
-              fetch('/admin', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ success: true }),
-              })
-              .then(() => {
-                window.location.href = '/admin';
-              })
-              break;
-            }
-          }
-          
-          if(!match){
-            error.style.opacity = '1';
-          }
+          window.location.href = '/admin';
         }
+        else{
+          error.style.opacity = '1';
+          error.textContent = res.message;
+        }
+      })
+      .catch(err => {
+        console.error('Login failed', err);
+        error.style.opacity = '1';
+        error.textContent = 'An error occurred. Please try again.';
       });
     });
   </script>

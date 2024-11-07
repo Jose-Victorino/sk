@@ -1,10 +1,10 @@
 var createError = require('http-errors');
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config();
-
 var indexRouter = require('./routes/rIndex');
 var adminRouter = require('./routes/rAdmin');
 
@@ -15,10 +15,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(
+  session({
+    secret: 'secret-key', // Change this to a secure key in production
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour session
+  })
+);
 app.use('/', indexRouter);
 app.use('/admin', adminRouter);
 

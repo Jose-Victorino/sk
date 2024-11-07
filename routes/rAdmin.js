@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var con = require('../config/db');
-var LocalStorage = require('node-localstorage').LocalStorage,
-localStorage = new LocalStorage('./scratch');
 
 const loadData = (tableNames) => {
   const selectQuery = tableNames.map((tableName) => {
@@ -21,34 +19,39 @@ const loadData = (tableNames) => {
 
   return Promise.all(selectQuery);
 }
+const bcrypt = require('bcrypt'); 
 
-router.get('/', function(req, res){
-  const login = JSON.parse(localStorage.getItem('login')) || {};
-
-  if(login.success || req.body.success){
-    localStorage.setItem('login', JSON.stringify({ success: true }));
-    res.render('admin');
-  }
-  else{
-    res.render('login', { loginData: false });
-  }
-});
-router.post('/', function(req, res){
-  localStorage.setItem('login', JSON.stringify({ success: true }));
-  res.render('admin');
-});
 router.get('/login', function(req, res){
+  res.render('login', { loginData: false });
+});
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
 
-  con.all('SELECT * FROM admin', function(err, rows){
+  con.all('SELECT * FROM admin WHERE Username = ?', [username], async (err, user) => {
     if(err){
       console.error('Cannot load admin data', err);
       return res.status(500).json({ success: false, message: 'Cannot load admin data' });
     }
+    
+    if(user && (password === user[0].Password)){
+      req.session.userId = user[0].AdminID;
+      
+      return res.status(200).json({ success: true, message: 'Login successful' });
+    }
     else{
-      return res.status(200).json({ success: true, message: 'data successfully loaded!', data: rows });
+      return res.status(401).json({ success: false, message: 'Invalid username or password' });
     }
   });
 });
+router.get('/', (req, res) => {
+  if(req.session.userId){
+    res.render('admin');
+  }
+  else{
+    res.redirect('/admin/login');
+  }
+});
+
 // ANNOUNCEMENT
 router.get('/anncGet', function(req, res){
   loadData(['announcement', 'gallery images', 'comments'])

@@ -5,7 +5,7 @@ DROP TABLE admin;
 DROP TABLE `council members`;
 CREATE TABLE IF NOT EXISTS admin (
     AdminID INTEGER,
-    Username VARCHAR(45) NOT NULL,
+    Username VARCHAR(45) UNIQUE NOT NULL,
     Password VARCHAR(45) NOT NULL,
     PRIMARY KEY (AdminID)
 );
