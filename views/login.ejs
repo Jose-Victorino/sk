@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Bulakan | Login</title>
+  <link rel="shortcut icon" href="" type="png">
+  <link rel="stylesheet" href="../stylesheets/reset.css">
+  <link rel="stylesheet" href="../stylesheets/nav.css">
+  <link rel="stylesheet" href="../stylesheets/login.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div>
+    <form>
+      <h1>Login</h1>
+      <p>Invalid username or password</p>
+      <input type="text" name="username" id="username" placeholder="username" required>
+      <input type="password" name="password" id="password" placeholder="password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <div>
+    
+  </div>
+  <script src="../javascripts/script.js"></script>
+  <script>
+    const form = document.querySelector('form');
+    const error = document.querySelector('p');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const username = form.querySelector('#username');
+      const password = form.querySelector('#password');
+      
+      fetch('/admin/login')
+      .then(response => response.json())
+      .then(res => {
+        if(res.success){
+          let match = false;
+
+          for(const admin of res.data){
+            const { Username, Password } = admin;
+
+            if(username.value === Username && password.value === Password){
+              match = true;
+              
+              fetch('/admin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ success: true }),
+              })
+              .then(() => {
+                window.location.href = '/admin';
+              })
+              break;
+            }
+          }
+          
+          if(!match){
+            error.style.opacity = '1';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

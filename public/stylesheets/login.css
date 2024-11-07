@@ -1,0 +1,16 @@
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 300px;
+}
+form button{
+  background: var(--white);
+  padding: 8px 14px;
+  border: solid 1px var(--l-gray-1);
+  width: fit-content;
+}
+p{
+  opacity: 0;
+  color: hsl(0, 87%, 49%);
+}

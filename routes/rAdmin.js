@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var con = require('../config/db');
+var LocalStorage = require('node-localstorage').LocalStorage,
+localStorage = new LocalStorage('./scratch');
 
 const loadData = (tableNames) => {
   const selectQuery = tableNames.map((tableName) => {
@@ -21,9 +23,32 @@ const loadData = (tableNames) => {
 }
 
 router.get('/', function(req, res){
+  const login = JSON.parse(localStorage.getItem('login')) || {};
+
+  if(login.success || req.body.success){
+    localStorage.setItem('login', JSON.stringify({ success: true }));
+    res.render('admin');
+  }
+  else{
+    res.render('login', { loginData: false });
+  }
+});
+router.post('/', function(req, res){
+  localStorage.setItem('login', JSON.stringify({ success: true }));
   res.render('admin');
 });
+router.get('/login', function(req, res){
 
+  con.all('SELECT * FROM admin', function(err, rows){
+    if(err){
+      console.error('Cannot load admin data', err);
+      return res.status(500).json({ success: false, message: 'Cannot load admin data' });
+    }
+    else{
+      return res.status(200).json({ success: true, message: 'data successfully loaded!', data: rows });
+    }
+  });
+});
 // ANNOUNCEMENT
 router.get('/anncGet', function(req, res){
   loadData(['announcement', 'gallery images', 'comments'])

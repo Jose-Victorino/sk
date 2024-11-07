@@ -145,7 +145,7 @@ form .bottom{
 }
 form .bottom .errorMsg{
   opacity: 0;
-  color: rgb(235, 16, 16);
+  color: hsl(0, 87%, 49%);
 }
 form .bottom button{
   background: var(--white);
