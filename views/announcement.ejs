@@ -31,9 +31,16 @@
         <ul class="anncList">
           <% announcements.forEach(annc => { %>
             <%
-            const { AnnouncementID, Title, Description, Image, DatePosted } = annc;
-            const setDate = new Date(DatePosted);
-            const formattedDate = `${setDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} ${setDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+              const { AnnouncementID, Title, Description, Image, DatePosted } = annc;
+              const setDate = new Date(DatePosted);
+              const formattedDate = `${setDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} ${setDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+              let commentCount = 0;
+
+              for(comment of comments){
+                if(comment.AnnouncementID === AnnouncementID){
+                  commentCount++;
+                }
+              }
             %>
             <li>
               <input type="hidden" value="<%= AnnouncementID %>">
@@ -44,9 +51,9 @@
                   <p><%= formattedDate %></p>
                 </div>
                 <div class="bottom">
-                  <a href="">
+                  <a>
                     <img src="../images/svg/message.svg" alt="message">
-                    <span>0</span>
+                    <span><%= commentCount %></span>
                   </a>
                 </div>
               </div>
@@ -60,5 +67,6 @@
     </footer>
   </main>
   <script src="../javascripts/script.js"></script>
+  <script src="../javascripts/announcement.js"></script>
 </body>
 </html>

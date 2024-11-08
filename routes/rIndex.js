@@ -20,6 +20,38 @@ const loadData = (tableNames) => {
   return Promise.all(selectQuery);
 }
 
+const loadAnnc = (id) => {
+  const announcementsQuery = new Promise((resolve, reject) => {
+    con.all('SELECT * FROM announcement WHERE AnnouncementID = ?', [id], function(err, rows) {
+      if(err){
+        console.error('Cannot load announcements data');
+        reject(err);
+      }
+      resolve(rows);
+    });
+  });
+  const galImagesQuery = new Promise((resolve, reject) => {
+    con.all('SELECT * FROM `gallery images` WHERE AnnouncementID = ? ORDER BY Pos ASC', [id], function(err, rows) {
+      if(err){
+        console.error('Cannot load images data');
+        reject(err);
+      }
+      resolve(rows);
+    });
+  });
+  const commentsQuery = new Promise((resolve, reject) => {
+    con.all('SELECT * FROM comments WHERE AnnouncementID = ?', [id], function(err, rows) {
+      if(err){
+        console.error('Cannot load comments data');
+        reject(err);
+      }
+      resolve(rows);
+    });
+  });
+
+  return Promise.all([announcementsQuery, galImagesQuery, commentsQuery]);
+};
+
 // HOME
 router.get('/', function(req, res){
   loadData(['announcement', 'gallery images', 'comments', 'council members'])
@@ -66,10 +98,45 @@ router.get('/Announcement', function(req, res){
     res.status(500).json({ success: false, message: 'Cannot load data' });
   });
 });
-router.get('/Announcement/view/:id', function(req, res){
-  const { id } = req.params.id;
-
+router.get('/Announcement/:id', function(req, res){
+  const { id } = req.params;
   
+  loadAnnc(id)
+  .then(([announcement, galImages, comments]) => {
+    res.render('anncFocus', {
+      id,
+      announcement: announcement[0] || [],
+      galImages: galImages || [],
+      comments: comments || [],
+    });
+  })
+  .catch(err => {
+    console.error('Cannot load data', err);
+    res.status(500).json({ success: false, message: 'Cannot load data' });
+  });
+});
+router.get('/Announcement/:id/getComments', function(req, res){
+  const { id } = req.params;
+
+  con.all('SELECT * FROM comments WHERE AnnouncementID = ? ORDER BY CommentDate DESC', [id], function (err, rows){
+    if(err){
+      console.error('Cannot load data', err);
+      res.status(500).json({ success: false, message: 'Cannot load data' });
+    }
+    res.status(200).json({ success: true, message: 'Records successfully added!', data: rows});
+  });
+});
+router.post('/Announcement/:id/addComment', function(req, res){
+  const { id } = req.params;
+  const { text } = req.body;
+  
+  con.run('INSERT INTO comments (AnnouncementID, Text, CommentDate) VALUES(?, ?, ?)', [id, text, new Date().toISOString()], function (err){
+    if(err){
+      console.error('Cannot load data', err);
+      res.status(500).json({ success: false, message: 'Cannot load data' });
+    }
+    res.status(200).json({ success: true, message: 'Records successfully added!' });
+  });
 });
 
 // CONTACTS

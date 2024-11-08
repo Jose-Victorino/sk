@@ -19,7 +19,6 @@ const loadData = (tableNames) => {
 
   return Promise.all(selectQuery);
 }
-const bcrypt = require('bcrypt'); 
 
 router.get('/login', function(req, res){
   res.render('login');

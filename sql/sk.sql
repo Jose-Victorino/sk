@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `gallery images` (
 CREATE TABLE IF NOT EXISTS comments (
     CommentID INTEGER,
     AnnouncementID INTEGER NOT NULL,
-    Text LONGTEXT,
+    Text LONGTEXT NOT NULL,
     CommentDate DATETIME,
     PRIMARY KEY (CommentID),
     FOREIGN KEY (AnnouncementID) REFERENCES announcement(AnnouncementID)
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `council members` (
     PRIMARY KEY (CouncilID)
 );
 
---INSERT INTO admin (FirstName, LastName, Username, Email, Password) VALUES("last", "first", "bim", "@fafe", "qwerty");
+--INSERT INTO admin (FUsername, Password) VALUES("@fafe", "qwerty");
 --UPDATE admin SET FirstName = "", LastName = "", Username = "", Email = "", Password = "" WHERE AdminID = ;
 --DELETE FROM admin WHERE AdminID = ;
 
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `council members` (
 
 --INSERT INTO `council members` (FirstName, MiddleInitial, LastName, Position, Image) VALUES("", "", "", "", "");
 --UPDATE `council members` SET FirstName = , MiddleInitial = , LastName = , Position = , Image =  WHERE CouncilID = ;
---DELETE FROM `council members` WHERE AnnouncementID = ;
+--DELETE FROM `council members` WHERE CouncilID = ;
 
 SELECT * FROM `gallery images`;
 SELECT * FROM comments;

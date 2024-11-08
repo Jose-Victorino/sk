@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Bulakan | <%= announcement.Title %></title>
+  <link rel="shortcut icon" href="" type="png">
+  <link rel="stylesheet" href="../stylesheets/reset.css">
+  <link rel="stylesheet" href="../stylesheets/nav.css">
+  <link rel="stylesheet" href="../stylesheets/anncFocus.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <input id="anncID" type="hidden" value="<%= id %>">
+  <nav class="show">
+    <%- include('templates/navigation') %>
+  </nav>
+  <main>
+    <section>
+      <div class="cont">
+        <%
+          const { AnnouncementID, Title, Description, Image, DatePosted } = announcement;
+          const setDate = new Date(DatePosted);
+          const formattedDate = `${setDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} ${setDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+        %>
+        <div class="head">
+          <h1 id="title"><%= Title %></h1>
+          <span id="datePosted"><%= formattedDate %></span>
+        </div>
+        <div class="body">
+          <img id="mainImg" src="<%= Image %>" alt="main image">
+          <p id="description"><%= Description %></p>
+        </div>
+        <div class="gallery">
+          <h1>Gallery</h1>
+          <ul class="galleryImgs">
+            <% galImages.forEach(img => { %>
+              <% const { ImagePath } = img; %>
+              <% if(ImagePath !== null){ %>
+                <li>
+                  <img src="<%= ImagePath %>" alt="gallery image">
+                </li>
+              <% } %>
+            <% }); %>
+          </ul>
+        </div>
+        <div class="bottom">
+          <%
+            let commentCount = 0;
+
+            for(comment of comments){
+              if(comment.AnnouncementID === AnnouncementID){
+                commentCount++;
+              }
+            }
+          %>
+          <h2><%= commentCount %> Comment</h2>
+          <hr>
+          <form>
+            <textarea name="comment" id="comment" required></textarea>
+            <div>
+              <button type="reset">Clear</button>
+              <button type="submit">Send</button>
+            </div>
+          </form>
+          <ul class="commentList">
+            <li>
+              <img src="../images/svg/circle-user.svg" alt="user">
+              <div class="txt">
+                <span>November 8 2024 8:26pm</span>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum nesciunt et eius corporis nam ea sapiente ipsam aliquam doloremque sunt, odio incidunt. Quibusdam voluptatum quam quia labore corrupti nisi vitae blanditiis sequi repudiandae illo nostrum, temporibus eos cupiditate placeat ex enim iusto laborum, omnis, veniam hic ea eveniet neque sed!</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <%- include('templates/footer') %>
+    </footer>
+  </main>
+  <script src="../javascripts/imgViewer.js"></script>
+  <script src="../javascripts/anncFocus.js"></script>
+</body>
+</html>

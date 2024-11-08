@@ -163,13 +163,14 @@ function imageChange(inputElement, imageElement, labelElement, paragraphElement,
   inputElement.addEventListener('change', (e) => {
     const file = e.target.files[0];
 
-    if (file && file.type.startsWith('image/')) {
+    if(file && file.type.startsWith('image/')){
       imageElement.src = `${path}${file.name}`;
       imageElement.style.display = 'block';
       imageElement.dataset.imgName = file.name;
       labelElement.classList.add('hasImg');
       paragraphElement.style.display = 'none';
-    } else {
+    }
+    else{
       imageElement.src = '';
       imageElement.style.display = 'none';
       imageElement.dataset.imgName = '';
@@ -264,7 +265,7 @@ const anncList = document.querySelector('.anncPreview');
 const councilList = document.querySelector('.councilPreview');
 
 function loadAnnouncements(data){
-  const { announcements, mainImages, galImages } = data;
+  const { announcements, galImages } = data;
   anncList.innerHTML = '';
 
   for(const annc of announcements){

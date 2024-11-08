@@ -31,7 +31,8 @@ header h1{
 .anncList li{
   background: var(--white-new);
   display: flex;
-  border: 1px solid var(--d-gray-1);
+  border: 1px solid var(--l-gray-2);
+  cursor: pointer;
 }
 .anncList .content{
   display: flex;
