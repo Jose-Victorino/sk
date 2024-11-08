@@ -22,7 +22,7 @@ const loadData = (tableNames) => {
 const bcrypt = require('bcrypt'); 
 
 router.get('/login', function(req, res){
-  res.render('login', { loginData: false });
+  res.render('login');
 });
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -33,9 +33,8 @@ router.post('/login', (req, res) => {
       return res.status(500).json({ success: false, message: 'Cannot load admin data' });
     }
     
-    if(user && (password === user[0].Password)){
-      req.session.userId = user[0].AdminID;
-      
+    if(user.length && (password === user[0].Password)){
+      req.session.AdminID = user[0].AdminID;
       return res.status(200).json({ success: true, message: 'Login successful' });
     }
     else{
@@ -44,7 +43,7 @@ router.post('/login', (req, res) => {
   });
 });
 router.get('/', (req, res) => {
-  if(req.session.userId){
+  if(req.session.AdminID){
     res.render('admin');
   }
   else{

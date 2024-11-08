@@ -1,6 +1,26 @@
+
 header{
-  background: var(--l-gray-1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 300px;
+}
+header .bgImg{
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  filter: blur(6px);
+  height: 300px;
+  width: 100%;
+}
+header h1{
+  font-family: 'Host Grotesk';
+  font-weight: bold;
+  color: var(--font-dark);
+  font-size: var(--fs-30-36);
+  z-index: 1;
 }
 
 .anncList{
@@ -9,9 +29,9 @@ header{
   gap: 20px;
 }
 .anncList li{
-  background: var(--white);
+  background: var(--white-new);
   display: flex;
-  border: 1px solid var(--l-gray-1);
+  border: 1px solid var(--d-gray-1);
 }
 .anncList .content{
   display: flex;

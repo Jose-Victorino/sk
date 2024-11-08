@@ -153,6 +153,7 @@ class slider{
       const img = card.querySelector('img');
 
       Object.assign(card.style, {
+        display: 'flex',
         minWidth: `calc((100% - ${gap * (perPage - 1)}px) / ${perPage})`,
         aspectRatio: cardAspectRatio,
       });
