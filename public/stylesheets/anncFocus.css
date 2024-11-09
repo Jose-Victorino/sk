@@ -1,7 +1,9 @@
-.cont{
+section .cont{
+  background: var(--white-new);
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 30px;
 }
 .head{
   display: flex;
@@ -22,11 +24,6 @@
 #mainImg{
   width: 50%;
 }
-.galleryImgs img{
-  object-fit: cover;
-  width: 100%;
-  aspect-ratio: 1;
-}
 .gallery{
   display: flex;
   flex-direction: column;
@@ -37,11 +34,18 @@
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
 }
+.galleryImgs li{
+  display: flex;
+}
+.galleryImgs img{
+  object-fit: cover;
+  width: 100%;
+  aspect-ratio: 1;
+}
 
 .bottom{
   background: var(--l-gray-1);
   padding: 20px;
-  border: solid 1px var(--d-gray-2);
 }
 .bottom hr{
   margin: 20px 0 30px;

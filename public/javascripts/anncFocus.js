@@ -75,4 +75,8 @@ window.onload = () => {
   .catch(error => {
     console.error('Error fetching data:', error);
   });
+
+  const galImg = document.querySelector('.galleryImgs');
+
+  new imageViewer(galImg);
 }

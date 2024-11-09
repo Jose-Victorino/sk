@@ -21,8 +21,8 @@ main article{
 article h1{
   font-size: var(--fs-20-24);
 }
-main article .addAnnc{
-  background: var(--white);
+main article :is(.addAnnc, .addCouncil){
+  background: var(--l-gray-1);
   padding: 8px 14px;
   border: solid 1px var(--l-gray-2);
   width: fit-content;
@@ -148,7 +148,7 @@ form .bottom .errorMsg{
   color: hsl(0, 87%, 49%);
 }
 form .bottom button{
-  background: var(--white);
+  background: var(--l-gray-1);
   font-size: var(--fs-12-14);
   padding: 8px 14px;
   border: solid 1px var(--l-gray-2);

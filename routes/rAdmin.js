@@ -21,25 +21,35 @@ const loadData = (tableNames) => {
 }
 
 router.get('/login', function(req, res){
-  res.render('login');
+  if(req.session.AdminID){
+    res.redirect('/admin')
+  }
+  else{
+    res.render('login');
+  }
 });
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  con.all('SELECT * FROM admin WHERE Username = ?', [username], async (err, user) => {
-    if(err){
-      console.error('Cannot load admin data', err);
-      return res.status(500).json({ success: false, message: 'Cannot load admin data' });
-    }
-    
-    if(user.length && (password === user[0].Password)){
-      req.session.AdminID = user[0].AdminID;
-      return res.status(200).json({ success: true, message: 'Login successful' });
-    }
-    else{
-      return res.status(401).json({ success: false, message: 'Invalid username or password' });
-    }
-  });
+  if(req.session.AdminID){
+    con.all('SELECT * FROM admin WHERE Username = ?', [username], async (err, user) => {
+      if(err){
+        console.error('Cannot load admin data', err);
+        return res.status(500).json({ success: false, message: 'Cannot load admin data' });
+      }
+      
+      if(user.length && password === user[0].Password){
+        req.session.AdminID = user[0].AdminID;
+        return res.status(200).json({ success: true, message: 'Login successful' });
+      }
+      else{
+        return res.status(401).json({ success: false, message: 'Invalid username or password' });
+      }
+    });
+  }
+  else{
+    return res.status(401).json({ success: false, message: 'An account has already been logged in.' });
+  }
 });
 router.get('/', (req, res) => {
   if(req.session.AdminID){
