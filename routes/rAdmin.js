@@ -31,7 +31,7 @@ router.get('/login', function(req, res){
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
-  if(req.session.AdminID){
+  if(!req.session.AdminID){
     con.all('SELECT * FROM admin WHERE Username = ?', [username], async (err, user) => {
       if(err){
         console.error('Cannot load admin data', err);

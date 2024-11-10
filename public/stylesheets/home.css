@@ -137,7 +137,9 @@ header img{
   #homeAbout :is(.mission, .vision) > div{
     aspect-ratio: auto ;
   }
-  
+  #homeAbout :is(.mission, .vision) .txt {
+    padding: 15px;
+  }
 }
 @media(max-width: 560px){
   #slogan h1{
