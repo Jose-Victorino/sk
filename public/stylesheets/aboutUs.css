@@ -27,7 +27,6 @@ main .mainAbout{
 }
 main .left{
   position: sticky;
-  top: 30px;
 }
 main .right h1{
   text-align: center;

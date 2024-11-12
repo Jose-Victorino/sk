@@ -23,6 +23,10 @@ header h1{
   z-index: 1;
 }
 
+.announcement .cont{
+  background: var(--l-gray-1);
+  padding: 30px 60px;
+}
 .anncList{
   display: flex;
   flex-direction: column;
@@ -79,11 +83,25 @@ header h1{
   
 }
 @media(max-width: 940px){
-  
+  .announcement .cont{
+    padding: 25px 40px;
+  }
 }
 @media(max-width: 780px){
-  
+  .announcement .cont{
+    padding: 15px;
+  }
+  .anncList .content {
+    padding: 15px;
+  }
 }
 @media(max-width: 560px){
-  
+  .announcement .cont{
+    background: none;
+    padding: 0;
+  }
+  .anncList img {
+    width: 45%;
+  }
+
 }
