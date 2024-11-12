@@ -45,14 +45,13 @@ header img{
 #homeAbout :is(.mission, .vision) .txt{
   color: var(--white);
   padding: 25px;
+  box-shadow: 10px 10px 30px -10px rgba(0,0,0,0.4);
 }
 #homeAbout .mission .txt{
   background: var(--red-2);
-  box-shadow: 10px 10px 30px -10px rgba(0,0,0,0.75);
 }
 #homeAbout .vision .txt{
   background: var(--blue-2);
-  box-shadow: -10px -10px 30px -10px rgba(0,0,0,0.75);
 }
 
 #anncLatest h1{
@@ -158,8 +157,7 @@ header img{
   #homeAbout :is(.mission, .vision) .imgCont{
     display: none;
   }
-  #homeAbout .mission .txt,
-  #homeAbout .vision .txt{
-    box-shadow: 10px 10px 15px -10px rgba(0,0,0,0.75);
+  #homeAbout :is(.mission, .vision) .txt{
+    box-shadow: 10px 10px 15px -10px rgba(0,0,0,0.5);
   }
 }

@@ -29,9 +29,9 @@ main .left{
   position: sticky;
 }
 main .right h1{
-  text-align: center;
+  color: var(--blue-3);
   font-size: var(--fs-20-24);
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 
 .councilMembers{
